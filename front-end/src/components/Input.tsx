@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import {
   forwardRef,
   ForwardRefRenderFunction,
@@ -6,20 +7,25 @@ import {
 import { FieldError } from 'react-hook-form'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string
+  name?: string
   label?: string
-  error: FieldError | undefined
+  error?: FieldError | undefined
 }
 
 const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, error, label, ...rest },
+  { name, error, label, className, ...rest },
   ref,
 ) => {
   return (
     <div>
       <label htmlFor={name} className="text-white">
         {label}
-        <input name={name} className="login-input w-full" ref={ref} {...rest} />
+        <input
+          name={name}
+          className={classNames('login-input w-full', className)}
+          ref={ref}
+          {...rest}
+        />
       </label>
       {error && <p className="text-red-400 text-sm mt-2">{error.message}</p>}
     </div>
