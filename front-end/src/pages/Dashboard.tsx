@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
 import { CaretLeft, CaretRight, SpinnerGap } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -8,25 +6,14 @@ import { Input } from '../components/Input'
 import { Navbar } from '../components/Navbar'
 import { Table } from '../components/Table'
 import { useSession } from '../contexts/UserContext'
+import { useUsers } from '../hooks/useUsers'
 
 export const Dashboard = () => {
   const { username, isLoading: isSessionLoading } = useSession()
   const [page, setPage] = useState(1)
   const [seed, setSeed] = useState('')
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['users', page],
-    queryFn: () =>
-      axios
-        .get(`https://randomuser.me/api/?page=${page}&results=20&seed=${seed}`)
-        .then((res) => {
-          setSeed(res.data.info.seed)
-          return res.data.results
-        }),
-    staleTime: 1000 * 60 * 15,
-  })
-
-  console.log(page)
+  const { data, isFetching } = useUsers({ page, setSeed, seed })
 
   const handleGoToPrevPage = () => {
     if (page - 1 >= 1) setPage((page) => page - 1)
