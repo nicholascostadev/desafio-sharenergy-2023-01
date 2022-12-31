@@ -51,7 +51,7 @@ export const Dashboard = () => {
               <div className="border border-white/5 rounded-md w-full mt-4 shadow-lg bg-glass-gradient">
                 <Table
                   data={data}
-                  titles={['Profile Image', 'Username', 'Email', 'Age']}
+                  titles={['Profile Image', 'Username', 'Name', 'Email', 'Age']}
                 />
                 <div className="flex justify-end gap-2 p-2">
                   <button

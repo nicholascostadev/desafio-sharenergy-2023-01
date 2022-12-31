@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { User } from '../@types/user'
 
 type TableProps = {
@@ -9,8 +10,14 @@ export const Table = ({ data, titles }: TableProps) => {
   return (
     <table className="table-auto border-collapse w-full text-sm">
       <thead className="text-gray-50">
-        {titles.map((title) => (
-          <th key={title} className="border-b border-slate-400/5 text-left p-2">
+        {titles.map((title, i) => (
+          <th
+            key={title}
+            className={classNames(
+              'border-b border-slate-400/5 text-left p-2',
+              i === titles.length - 1 && 'text-center',
+            )}
+          >
             {title}
           </th>
         ))}
