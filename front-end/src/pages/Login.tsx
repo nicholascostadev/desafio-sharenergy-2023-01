@@ -2,9 +2,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Input } from '../components/Input'
-import { useSession } from '../contexts/UserContext'
+import { useSession } from '../hooks'
 import { useEffect } from 'react'
-import { redirect, Router, useNavigate, useRoutes } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const loginSchema = z
   .object({

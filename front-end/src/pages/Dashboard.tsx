@@ -5,8 +5,7 @@ import { Container } from '../components/Container'
 import { Input } from '../components/Input'
 import { Navbar } from '../components/Navbar'
 import { Table } from '../components/Table'
-import { useSession } from '../hooks/useSession'
-import { useUsers } from '../hooks/useUsers'
+import { useSession, useUsers } from '../hooks'
 
 export const Dashboard = () => {
   const { username, isLoading: isSessionLoading } = useSession()
