@@ -5,7 +5,7 @@ import { Container } from '../components/Container'
 import { Input } from '../components/Input'
 import { Navbar } from '../components/Navbar'
 import { Table } from '../components/Table'
-import { useSession } from '../contexts/UserContext'
+import { useSession } from '../hooks/useSession'
 import { useUsers } from '../hooks/useUsers'
 
 export const Dashboard = () => {

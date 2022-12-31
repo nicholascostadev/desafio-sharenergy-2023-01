@@ -51,5 +51,3 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     <userContext.Provider value={sessionInfo}>{children}</userContext.Provider>
   )
 }
-
-export const useSession = () => useContext(userContext)
