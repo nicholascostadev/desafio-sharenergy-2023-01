@@ -7,11 +7,6 @@ import { z } from 'zod'
 import { Input } from './Input'
 import { validateCPF } from '../utils/cpfValidator'
 
-type ModalProps = {
-  closeModal: () => void
-  isOpen: boolean
-}
-
 const formSchema = z.object({
   name: z
     .string()
@@ -41,9 +36,19 @@ const formSchema = z.object({
   }),
 })
 
-type FormData = z.infer<typeof formSchema>
+export type FormData = z.infer<typeof formSchema>
 
-export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
+type ModalProps = {
+  closeModal: () => void
+  isOpen: boolean
+  initialData?: FormData
+}
+
+export const RegisterClientModal = ({
+  closeModal,
+  isOpen,
+  initialData,
+}: ModalProps) => {
   const {
     register,
     handleSubmit,
@@ -52,21 +57,12 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      telephone: '',
-      CPF: '',
-      email: '',
-      name: '',
-      address: {
-        CEP: '',
-        street: '',
-        number: '',
-      },
-    },
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+    values: initialData,
   })
 
   const handleAddClient = (data: FormData) => {
-    console.log(data)
     closeModal()
     reset()
   }
@@ -74,7 +70,24 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => {
+            closeModal()
+            reset({
+              name: '',
+              email: '',
+              telephone: '',
+              CPF: '',
+              address: {
+                number: '',
+                CEP: '',
+                street: '',
+              },
+            })
+          }}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -114,6 +127,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                       label="Nome do Cliente"
                       className="py-1 px-2"
                       error={errors.name}
+                      defaultValue={initialData?.name ?? ''}
                       {...register('name')}
                     />
                     <Input
@@ -121,6 +135,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                       label="E-mail do cliente"
                       className="py-1 px-2"
                       error={errors.email}
+                      defaultValue={initialData?.email ?? ''}
                       {...register('email')}
                     />
                     <Controller
@@ -132,6 +147,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                             mask="(99) 9 9999 9999"
                             placeholder="Telefone"
                             className="default-input relative py-1 px-2 w-full"
+                            defaultValue={initialData?.telephone}
                             onChange={(e) =>
                               onChange(
                                 e.target.value
@@ -156,6 +172,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                             mask="999.999.999-99"
                             placeholder="CPF"
                             label="CPF do cliente"
+                            defaultValue={initialData?.CPF}
                             className="default-input relative py-1 px-2 w-full"
                             onChange={(e) =>
                               onChange(
@@ -177,6 +194,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                         label="Rua"
                         className="py-1 px-2"
                         error={errors.address?.street}
+                        defaultValue={initialData?.address?.street ?? ''}
                         {...register('address.street')}
                       />
                       <Controller
@@ -188,6 +206,7 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                               mask="99999-999"
                               placeholder="CEP"
                               className="default-input relative py-1 px-2 w-full"
+                              defaultValue={initialData?.address?.CEP}
                               onChange={(e) =>
                                 onChange(
                                   e.target.value
@@ -206,12 +225,16 @@ export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
                         placeholder="Número (ex: 52)"
                         className="py-1 px-2"
                         error={errors.address?.number}
+                        defaultValue={initialData?.address?.number ?? ''}
                         {...register('address.number')}
                       />
                       <Input
                         placeholder="Complemento"
                         className="py-1 px-2"
                         error={errors.address?.additionalInfo}
+                        defaultValue={
+                          initialData?.address?.additionalInfo ?? ''
+                        }
                         {...register('address.additionalInfo')}
                       />
                     </div>
