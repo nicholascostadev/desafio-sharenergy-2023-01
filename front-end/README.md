@@ -1,5 +1,7 @@
 # TODO
 
+- [ ] Add a Font
+- [ ] Add page number to dashboard
 - [ ] Add fallback image to not found? Still don't know if it's needed since the CAT API already has a not found image
 - [ ] Add Dog API page
 - [ ] Remove react-query devtools when finished
