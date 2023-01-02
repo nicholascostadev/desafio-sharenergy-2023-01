@@ -11,16 +11,17 @@ export const Table = ({ data, titles }: TableProps) => {
     <table className="table-auto border-collapse w-full text-lg overflow-scroll">
       <thead className="text-gray-50">
         {titles.map((title, i) => (
-          <th
-            key={title}
-            className={classNames(
-              'border-b border-slate-400/5 text-left p-2',
-              i === titles.length - 1 && 'text-center',
-              'min-w-[155px]',
-            )}
-          >
-            {title}
-          </th>
+          <tr key={title}>
+            <th
+              className={classNames(
+                'border-b border-slate-400/5 text-left p-2',
+                i === titles.length - 1 && 'text-center',
+                'min-w-[155px]',
+              )}
+            >
+              {title}
+            </th>
+          </tr>
         ))}
       </thead>
       <tbody className="text-gray-300 text-base">
