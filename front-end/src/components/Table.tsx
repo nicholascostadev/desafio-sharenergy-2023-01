@@ -8,7 +8,7 @@ type TableProps = {
 
 export const Table = ({ data, titles }: TableProps) => {
   return (
-    <table className="table-auto border-collapse w-full text-sm">
+    <table className="table-auto border-collapse w-full text-lg overflow-scroll">
       <thead className="text-gray-50">
         {titles.map((title, i) => (
           <th
@@ -16,20 +16,21 @@ export const Table = ({ data, titles }: TableProps) => {
             className={classNames(
               'border-b border-slate-400/5 text-left p-2',
               i === titles.length - 1 && 'text-center',
+              'min-w-[155px]',
             )}
           >
             {title}
           </th>
         ))}
       </thead>
-      <tbody className="text-gray-300">
+      <tbody className="text-gray-300 text-base">
         {data.map((user: any) => (
           <tr key={user.id}>
             <td className="p-2">
               <img
                 src={user.picture.medium}
                 alt={`${user.name.first} ${user.name.last} profile picture`}
-                className="rounded-full h-12 w-12"
+                className="rounded-full h-16 w-16"
               />
             </td>
             <td className="p-2">{user.login.username}</td>

@@ -61,8 +61,8 @@ export const Dashboard = () => {
     <>
       <Navbar />
       <div className="bg-page-gradient">
-        <Container className="min-h-[calc(100vh-48px)] mt-[48px] pt-4">
-          <h2 className="text-white text-lg mb-2">Dashboard</h2>
+        <Container className="min-h-[calc(100vh-48px)] mt-16 pt-4">
+          <h2 className="text-white text-2xl mb-2">Dashboard</h2>
 
           <div>
             <Search
@@ -79,7 +79,7 @@ export const Dashboard = () => {
             )}
 
             {filteredUsers && (
-              <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient">
+              <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient overflow-x-scroll">
                 <Table
                   data={filteredUsers}
                   titles={[

@@ -12,13 +12,14 @@ export const Cat = () => {
     <>
       <Navbar />
       <div className="bg-page-gradient">
-        <Container className="min-h-[calc(100vh-48px)] mt-12 pt-4">
+        <Container className="min-h-[calc(100vh-48px)] mt-16 pt-4">
           <div>
+            <h2 className="text-white text-2xl">Cat API</h2>
             <Input
-              label="CAT API"
               placeholder="Procure por qualquer código HTTP"
               type="number"
               onChange={(e) => setStatus(e.target.value)}
+              className="text-base placeholder:text-base h-full"
             />
           </div>
           <div className="flex justify-center items-center">
