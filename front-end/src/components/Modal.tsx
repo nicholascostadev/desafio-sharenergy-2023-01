@@ -124,70 +124,53 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                       error={errors.email}
                       {...register('email')}
                     />
-                    <div className="w-full relative">
-                      <label className="flex flex-col text-white">
-                        Telefone
-                        <Controller
-                          control={control}
-                          name="telephone"
-                          render={({ field: { onChange } }) => {
-                            return (
-                              <div className="w-full">
-                                <InputMask
-                                  mask="(99) 9 9999 9999"
-                                  placeholder="Telefone"
-                                  className="default-input relative py-1 px-2 w-full"
-                                  onChange={(e) =>
-                                    onChange(
-                                      e.target.value
-                                        .replaceAll(' ', '')
-                                        .replaceAll('(', '')
-                                        .replaceAll(')', '')
-                                        .replaceAll('_', ''),
-                                    )
-                                  }
-                                />
-                                <p className="text-red-400 text-sm mt-2">
-                                  {errors.telephone?.message}
-                                </p>
-                              </div>
-                            )
-                          }}
-                        />
-                      </label>
-                    </div>
-                    <div className="w-full relative">
-                      <label className="flex flex-col text-white">
-                        CPF
-                        <Controller
-                          control={control}
-                          name="CPF"
-                          render={({ field: { onChange } }) => {
-                            return (
-                              <div className="w-full">
-                                <InputMask
-                                  mask="999.999.999-99"
-                                  placeholder="CPF"
-                                  // label="CPF do cliente"
-                                  className="default-input relative py-1 px-2 w-full"
-                                  onChange={(e) =>
-                                    onChange(
-                                      e.target.value
-                                        .replaceAll('-', '')
-                                        .replaceAll('.', '')
-                                        .replaceAll('_', ''),
-                                    )
-                                  }
-                                />
-                                <p className="text-red-400 text-sm mt-2">
-                                  {errors.CPF?.message}
-                                </p>
-                              </div>
-                            )
-                          }}
-                        />
-                      </label>
-                    </div>
+                    <Controller
+                      control={control}
+                      name="telephone"
+                      render={({ field: { onChange } }) => {
+                        return (
+                          <Input
+                            mask="(99) 9 9999 9999"
+                            placeholder="Telefone"
+                            className="default-input relative py-1 px-2 w-full"
+                            onChange={(e) =>
+                              onChange(
+                                e.target.value
+                                  .replaceAll(' ', '')
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', '')
+                                  .replaceAll('_', ''),
+                              )
+                            }
+                            error={errors.telephone}
+                            label="Telefone do cliente"
+                          />
+                        )
+                      }}
+                    />
+                    <Controller
+                      control={control}
+                      name="CPF"
+                      render={({ field: { onChange } }) => {
+                        return (
+                          <Input
+                            mask="999.999.999-99"
+                            placeholder="CPF"
+                            label="CPF do cliente"
+                            className="default-input relative py-1 px-2 w-full"
+                            onChange={(e) =>
+                              onChange(
+                                e.target.value
+                                  .replaceAll('-', '')
+                                  .replaceAll('.', '')
+                                  .replaceAll('_', ''),
+                              )
+                            }
+                            error={errors.CPF}
+                          />
+                        )
+                      }}
+                    />
                     <div className="grid grid-cols-2 w-full col-span-full gap-4">
                       <h3 className="col-span-full text-white">Endereço</h3>
                       <Input
@@ -197,37 +180,29 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                         error={errors.address?.street}
                         {...register('address.street')}
                       />
-                      <div className="w-full relative">
-                        <label className="flex flex-col text-white">
-                          CEP
-                          <Controller
-                            control={control}
-                            name="address.CEP"
-                            render={({ field: { onChange } }) => {
-                              return (
-                                <div className="w-full">
-                                  <InputMask
-                                    mask="99999-999"
-                                    placeholder="CEP"
-                                    className="default-input relative py-1 px-2 w-full"
-                                    onChange={(e) =>
-                                      onChange(
-                                        e.target.value
-                                          .replaceAll('.', '')
-                                          .replaceAll('-', '')
-                                          .replaceAll('_', ''),
-                                      )
-                                    }
-                                  />
-                                  <p className="text-red-400 text-sm mt-2">
-                                    {errors.address?.CEP?.message}
-                                  </p>
-                                </div>
-                              )
-                            }}
-                          />
-                        </label>
-                      </div>
+                      <Controller
+                        control={control}
+                        name="address.CEP"
+                        render={({ field: { onChange } }) => {
+                          return (
+                            <Input
+                              mask="99999-999"
+                              placeholder="CEP"
+                              className="default-input relative py-1 px-2 w-full"
+                              onChange={(e) =>
+                                onChange(
+                                  e.target.value
+                                    .replaceAll('.', '')
+                                    .replaceAll('-', '')
+                                    .replaceAll('_', ''),
+                                )
+                              }
+                              label="CEP do cliente"
+                              error={errors.address?.CEP}
+                            />
+                          )
+                        }}
+                      />
                       <Input
                         placeholder="Número (ex: 52)"
                         className="py-1 px-2"
