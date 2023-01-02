@@ -7,8 +7,10 @@ import {
   ReactElement,
 } from 'react'
 import { FieldError } from 'react-hook-form'
+import InputMask from 'react-input-mask'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  mask?: string
   name?: string
   label?: string
   error?: FieldError | undefined
@@ -16,8 +18,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   leftIcon?: ReactElement
 }
 
-const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  { name, error, label, rightIcon, leftIcon, className, ...rest },
+const InputBase: ForwardRefRenderFunction<any, InputProps> = (
+  { name, error, label, rightIcon, leftIcon, mask, className, ...rest },
   ref,
 ) => {
   if (label) {
@@ -30,12 +32,21 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           })}
         <label htmlFor={name} className="text-white flex flex-col">
           {label}
-          <input
-            name={name}
-            className={classNames('default-input w-full', className)}
-            ref={ref}
-            {...rest}
-          />
+          {mask ? (
+            <InputMask
+              mask={mask}
+              className={classNames('default-input w-full', className)}
+              ref={ref}
+              {...rest}
+            />
+          ) : (
+            <input
+              name={name}
+              className={classNames('default-input w-full', className)}
+              ref={ref}
+              {...rest}
+            />
+          )}
         </label>
         {rightIcon &&
           cloneElement(rightIcon, {
@@ -54,16 +65,29 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         cloneElement(leftIcon, {
           className: 'text-white absolute left-4 top-[50%] translate-y-[-50%]',
         })}
-      <input
-        name={name}
-        className={classNames(
-          'default-input w-full',
-          leftIcon && 'pl-12',
-          className,
-        )}
-        ref={ref}
-        {...rest}
-      />
+      {mask ? (
+        <InputMask
+          mask={mask}
+          className={classNames(
+            'default-input w-full',
+            leftIcon && 'pl-12',
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        />
+      ) : (
+        <input
+          name={name}
+          className={classNames(
+            'default-input w-full',
+            leftIcon && 'pl-12',
+            className,
+          )}
+          ref={ref}
+          {...rest}
+        />
+      )}
       {rightIcon &&
         cloneElement(rightIcon, {
           className: 'text-white absolute right-4 top-[50%] translate-y-[-50%]',
