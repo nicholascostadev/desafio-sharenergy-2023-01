@@ -13,7 +13,9 @@ export const useUsers = ({ page, setSeed, seed }: TUseUsersParams) =>
     queryKey: ['users', page],
     queryFn: () =>
       axios
-        .get(`https://randomuser.me/api/?page=${page}&results=20&seed=${seed}`)
+        .get(
+          `https://randomuser.me/api/?page=${page}&results=20&seed=${seed}&inc=email,dob,login,name,picture`,
+        )
         .then((res) => {
           setSeed(res.data.info.seed)
           return res.data.results
