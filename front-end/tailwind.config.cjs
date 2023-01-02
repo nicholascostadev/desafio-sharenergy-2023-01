@@ -11,6 +11,19 @@ module.exports = {
         'glass-gradient':
           'linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.05) 100%)',
       },
+      keyframes: {
+        'spin-reverse': {
+          '0%': {
+            transform: 'rotate(360deg)',
+          },
+          '100%': {
+            transform: 'rotate(0deg)',
+          },
+        },
+      },
+      animation: {
+        'spin-reverse': 'spin-reverse 1s linear infinite',
+      },
       fontFamily: {
         sans: '"Roboto", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       },
