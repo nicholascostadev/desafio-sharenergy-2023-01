@@ -17,6 +17,10 @@ const links = [
     to: '/dashboard/randomdog',
     text: 'Random dog',
   },
+  {
+    to: '/dashboard/clients',
+    text: 'Clientes',
+  },
 ]
 
 export const Navbar = () => {
