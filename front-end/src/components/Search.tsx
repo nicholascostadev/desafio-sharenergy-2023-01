@@ -1,21 +1,23 @@
 import { MagnifyingGlass } from 'phosphor-react'
+import { FilterOpts } from '../@types/filter'
 import { Input } from './Input'
 
 type SearchProps = {
-  changeSearch: (newSearch: string) => void
-  changeFilter: (newFilter: string) => void
-  filter: string
   title: string
+  filter: string
   searchByOptions: string[]
+  changeSearch: (newSearch: string) => void
+  changeFilter: (newFilter: FilterOpts) => void
 }
 
 export const Search = ({
-  filter,
-  changeFilter,
-  changeSearch,
   title,
+  filter,
   searchByOptions,
+  changeSearch,
+  changeFilter,
 }: SearchProps) => {
+  console.log('Filter: ', filter)
   return (
     <div>
       <div className="flex w-full">
@@ -34,8 +36,10 @@ export const Search = ({
               type="radio"
               value={option}
               name="filter"
-              onChange={(e) => changeFilter(e.target.value)}
-              defaultChecked={filter === option}
+              onChange={(e) =>
+                changeFilter(e.target.value.toLowerCase() as FilterOpts)
+              }
+              defaultChecked={filter === option || option === 'Nome'}
             />
             {option}
           </label>

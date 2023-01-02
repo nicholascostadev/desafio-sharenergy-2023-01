@@ -2,6 +2,8 @@ import { CaretLeft, CaretRight, SpinnerGap } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
+import { FilterOpts } from '../@types/filter'
+import { User } from '../@types/user'
 import { Container } from '../components/Container'
 import { Navbar } from '../components/Navbar'
 import { Search } from '../components/Search'
@@ -14,12 +16,26 @@ export const Dashboard = () => {
   const [search, setSearch] = useState('')
   // debounced value of search(after 500ms set to the current value of the state)
   const [searchValue] = useDebounce(search, 500)
-  const [selectedFilter, setSelectedFilter] = useState('name')
+  const [selectedFilter, setSelectedFilter] = useState<FilterOpts>('name')
   const [page, setPage] = useState(1)
   // seed comes from the first request, so needs to be set after the response
   const [seed, setSeed] = useState('')
 
   const { data, isFetching } = useUsers({ page, setSeed, seed })
+
+  const filteredUsers: User[] = data?.filter((user: User) => {
+    switch (selectedFilter.toLowerCase()) {
+      case 'email':
+        return user.email.toLowerCase().includes(searchValue)
+      case 'username':
+        return user.login.username.toLowerCase().includes(searchValue)
+      default:
+        return (
+          user.name.first.toLowerCase().includes(searchValue) ||
+          user.name.last.toLowerCase().includes(searchValue)
+        )
+    }
+  })
 
   const handleGoToPrevPage = () => {
     if (page - 1 >= 1) setPage((page) => page - 1)
@@ -33,7 +49,7 @@ export const Dashboard = () => {
     setSearch(newSearch.toLowerCase())
   }
 
-  const changeFilter = (newFilter: string) => {
+  const changeFilter = (newFilter: FilterOpts) => {
     setSelectedFilter(newFilter)
   }
 
@@ -62,10 +78,10 @@ export const Dashboard = () => {
               </div>
             )}
 
-            {data && (
+            {filteredUsers && (
               <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient">
                 <Table
-                  data={data}
+                  data={filteredUsers}
                   titles={[
                     'Foto de perfil',
                     'Username',
