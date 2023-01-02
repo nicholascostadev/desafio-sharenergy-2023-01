@@ -79,7 +79,7 @@ export const Dashboard = () => {
             )}
 
             {filteredUsers && (
-              <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient overflow-x-scroll">
+              <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient overflow-x-auto">
                 <Table
                   data={filteredUsers}
                   titles={[
@@ -91,6 +91,7 @@ export const Dashboard = () => {
                   ]}
                 />
                 <div className="flex justify-end gap-2 p-2">
+                  <p className="text-white">Página {page}</p>
                   <button
                     aria-label="Go back one page"
                     className="text-gray-300 hover:text-white disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
