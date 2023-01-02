@@ -4,7 +4,7 @@
 
 
 @layer components {
-  .login-input {
+  .default-input {
     @apply border-0 border-slate-500 bg-transparent p-3 mt-2 rounded-md text-white text-base transition-colors placeholder:text-gray-400 focus:outline-0 ring-1 ring-slate-500 focus:ring-1 focus:ring-indigo-500 focus:bg-input-gradient  
   }
   

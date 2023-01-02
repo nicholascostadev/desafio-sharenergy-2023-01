@@ -32,7 +32,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
           {label}
           <input
             name={name}
-            className={classNames('login-input w-full', className)}
+            className={classNames('default-input w-full', className)}
             ref={ref}
             {...rest}
           />
@@ -57,7 +57,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
       <input
         name={name}
         className={classNames(
-          'login-input w-full',
+          'default-input w-full',
           leftIcon && 'pl-12',
           className,
         )}
