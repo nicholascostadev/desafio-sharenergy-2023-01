@@ -2,9 +2,11 @@ import { Dialog, Transition } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Spinner } from 'phosphor-react'
 import { Fragment } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from './Input'
+import InputMask from 'react-input-mask'
+import { validateCPF } from '../utils/cpfValidator'
 
 type ModalProps = {
   closeModal: () => void
@@ -17,11 +19,21 @@ const formSchema = z.object({
     .min(1, 'Nome tem que ter pelo menos 1 caractere')
     .max(60, 'Nome pode ter no máximo 60 caracteres'),
   email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
-  telephone: z.string().min(1, 'Telefone é obrigatório'),
-  CPF: z
+  telephone: z
     .string()
-    .min(1, 'CPF é obrigatório')
-    .length(11, 'CPF deve ter 11 dígitos'),
+    .min(1, 'Telefone é obrigatório')
+    .refine(
+      (val) => {
+        console.log(val)
+        return val.length === 11
+      },
+      {
+        message: 'Telefone inválido',
+      },
+    ),
+  CPF: z.string().length(11, 'CPF deve ter 11 dígitos').refine(validateCPF, {
+    message: 'CPF informado não existe',
+  }),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -31,8 +43,15 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    control,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      telephone: '',
+      CPF: '',
+      email: '',
+      name: '',
+    },
   })
 
   const handleAddClient = (data: FormData) => {
@@ -92,27 +111,77 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                       error={errors.email}
                       {...register('email')}
                     />
-                    <Input
-                      placeholder="Telefone"
-                      label="Telefone do cliente"
-                      className="py-1 px-2"
-                      error={errors.telephone}
-                      {...register('telephone')}
-                    />
-                    <Input
-                      placeholder="CPF"
-                      label="CPF do cliente"
-                      className="py-1 px-2"
-                      error={errors.CPF}
-                      {...register('CPF')}
-                    />
+                    <div className="w-full relative">
+                      <label className="flex flex-col text-white">
+                        Telefone
+                        <Controller
+                          control={control}
+                          name="telephone"
+                          render={({ field: { onChange, value } }) => {
+                            return (
+                              <div className="w-full">
+                                <InputMask
+                                  mask="(99) 9 9999 9999"
+                                  placeholder="Telefone"
+                                  className="default-input relative py-1 px-2 w-full"
+                                  onChange={(e) =>
+                                    onChange(
+                                      e.target.value
+                                        .replaceAll(' ', '')
+                                        .replaceAll('(', '')
+                                        .replaceAll(')', '')
+                                        .replaceAll('_', ''),
+                                    )
+                                  }
+                                />
+                                <p className="text-red-400 text-sm mt-2">
+                                  {errors.telephone?.message}
+                                </p>
+                              </div>
+                            )
+                          }}
+                        />
+                      </label>
+                    </div>
+                    <div className="w-full relative">
+                      <label className="flex flex-col text-white">
+                        CPF
+                        <Controller
+                          control={control}
+                          name="CPF"
+                          render={({ field: { onChange, value } }) => {
+                            return (
+                              <div className="w-full">
+                                <InputMask
+                                  mask="999.999.999-99"
+                                  placeholder="CPF"
+                                  // label="CPF do cliente"
+                                  className="default-input relative py-1 px-2 w-full"
+                                  onChange={(e) =>
+                                    onChange(
+                                      e.target.value
+                                        .replaceAll('.', '')
+                                        .replaceAll('-', '')
+                                        .replaceAll('_', ''),
+                                    )
+                                  }
+                                />
+                                <p className="text-red-400 text-sm mt-2">
+                                  {errors.CPF?.message}
+                                </p>
+                              </div>
+                            )
+                          }}
+                        />
+                      </label>
+                    </div>
 
                     <div className="mt-4">
                       <button
                         type="submit"
                         className="inline-flex justify-center items-center gap-2 rounded-md border border-white/5 bg-transparent hover:bg-white/5 px-4 py-2 text-sm text-white font-medium transition-colors disabled:bg-white/20 disabled:text-gray-500 disabled:cursor-not-allowed"
                         disabled={
-                          isSubmitting || Object.keys(errors).length > 0
+                          isSubmitting /* || Object.keys(errors).length > 0 */
                         }
                       >
                         {isSubmitting && (

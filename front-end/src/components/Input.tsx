@@ -28,7 +28,7 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             className:
               'text-white absolute left-4 top-[50%] translate-y-[-50%]',
           })}
-        <label htmlFor={name} className="text-white">
+        <label htmlFor={name} className="text-white flex flex-col">
           {label}
           <input
             name={name}
