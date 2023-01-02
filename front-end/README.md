@@ -4,6 +4,7 @@
 - [x] Add page number to dashboard
 - [ ] Add fallback image to not found? Still don't know if it's needed since the CAT API already has a not found image
 - [x] Add Dog API page
+- [ ] Add red ring when there are any validation error
 - [ ] Remove react-query devtools when finished
 - [ ] See if there are any abstraction or any componentization that I can make better
   - Maybe make table accept 'rows' props instead of 'data' if it can be used later for some other table.
