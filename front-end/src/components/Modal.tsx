@@ -44,6 +44,7 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,6 +58,7 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
   const handleAddClient = (data: FormData) => {
     console.log(data)
     closeModal()
+    reset()
   }
 
   return (
@@ -181,7 +183,7 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                         type="submit"
                         className="inline-flex justify-center items-center gap-2 rounded-md border border-white/5 bg-transparent hover:bg-white/5 px-4 py-2 text-sm text-white font-medium transition-colors disabled:bg-white/20 disabled:text-gray-500 disabled:cursor-not-allowed"
                         disabled={
-                          isSubmitting /* || Object.keys(errors).length > 0 */
+                          isSubmitting || Object.keys(errors).length > 0
                         }
                       >
                         {isSubmitting && (
