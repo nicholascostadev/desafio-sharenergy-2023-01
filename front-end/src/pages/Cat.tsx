@@ -12,7 +12,7 @@ export const Cat = () => {
     <>
       <Navbar />
       <div className="bg-page-gradient">
-        <Container className="min-h-[calc(100vh-48px)] mt-16 pt-4">
+        <Container className="min-h-[calc(100vh-64px)] mt-16 pt-4">
           <div>
             <h2 className="text-white text-2xl">Cat API</h2>
             <Input

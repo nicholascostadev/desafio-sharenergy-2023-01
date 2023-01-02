@@ -61,7 +61,7 @@ export const Dashboard = () => {
     <>
       <Navbar />
       <div className="bg-page-gradient">
-        <Container className="min-h-[calc(100vh-48px)] mt-16 pt-4">
+        <Container className="min-h-[calc(100vh-64px)] mt-16 pt-4">
           <h2 className="text-white text-2xl mb-2">Dashboard</h2>
 
           <div>
