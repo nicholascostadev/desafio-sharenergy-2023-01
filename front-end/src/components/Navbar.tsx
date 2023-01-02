@@ -8,7 +8,7 @@ const links = [
     text: 'Dashboard',
   },
   {
-    to: '/dashboard/cat ',
+    to: '/dashboard/cat',
     text: 'Cat API',
   },
   {
