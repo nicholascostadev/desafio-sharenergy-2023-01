@@ -5,7 +5,6 @@ import { Fragment } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Input } from './Input'
-import InputMask from 'react-input-mask'
 import { validateCPF } from '../utils/cpfValidator'
 
 type ModalProps = {
@@ -44,7 +43,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
-export const Modal = ({ closeModal, isOpen }: ModalProps) => {
+export const RegisterClientModal = ({ closeModal, isOpen }: ModalProps) => {
   const {
     register,
     handleSubmit,

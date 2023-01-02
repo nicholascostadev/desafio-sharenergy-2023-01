@@ -1,7 +1,7 @@
 import { Plus } from 'phosphor-react'
 import { useState } from 'react'
 import { Container } from '../components/Container'
-import { Modal } from '../components/Modal'
+import { RegisterClientModal } from '../components/RegisterClientModal'
 import { Navbar } from '../components/Navbar'
 
 export const Clients = () => {
@@ -19,9 +19,9 @@ export const Clients = () => {
     <>
       <div className="bg-page-gradient">
         <Navbar />
-        <Modal isOpen={isModalOpen} closeModal={closeModal} />
+        <RegisterClientModal isOpen={isModalOpen} closeModal={closeModal} />
 
-        <Container className="min-h-[calc(100vh-48px)] mt-16 pt-4">
+        <Container className="min-h-[calc(100vh-64px)] mt-16 pt-4">
           <h2 className="text-white text-2xl">Clientes</h2>
 
           <div className="flex justify-end">
