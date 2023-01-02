@@ -34,6 +34,12 @@ const formSchema = z.object({
   CPF: z.string().length(11, 'CPF deve ter 11 dígitos').refine(validateCPF, {
     message: 'CPF informado não existe',
   }),
+  address: z.object({
+    CEP: z.string().length(8, 'CEP deve ter 8 dígitos'),
+    street: z.string().min(1, 'Rua é obrigatória'),
+    number: z.string().min(1, 'Número é obrigatório'),
+    additionalInfo: z.string().optional(),
+  }),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -52,6 +58,11 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
       CPF: '',
       email: '',
       name: '',
+      address: {
+        CEP: '',
+        street: '',
+        number: '',
+      },
     },
   })
 
@@ -119,7 +130,7 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                         <Controller
                           control={control}
                           name="telephone"
-                          render={({ field: { onChange, value } }) => {
+                          render={({ field: { onChange } }) => {
                             return (
                               <div className="w-full">
                                 <InputMask
@@ -151,7 +162,7 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                         <Controller
                           control={control}
                           name="CPF"
-                          render={({ field: { onChange, value } }) => {
+                          render={({ field: { onChange } }) => {
                             return (
                               <div className="w-full">
                                 <InputMask
@@ -162,8 +173,8 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                                   onChange={(e) =>
                                     onChange(
                                       e.target.value
-                                        .replaceAll('.', '')
                                         .replaceAll('-', '')
+                                        .replaceAll('.', '')
                                         .replaceAll('_', ''),
                                     )
                                   }
@@ -177,8 +188,61 @@ export const Modal = ({ closeModal, isOpen }: ModalProps) => {
                         />
                       </label>
                     </div>
+                    <div className="grid grid-cols-2 w-full col-span-full gap-4">
+                      <h3 className="col-span-full text-white">Endereço</h3>
+                      <Input
+                        placeholder="Rua"
+                        label="Rua"
+                        className="py-1 px-2"
+                        error={errors.address?.street}
+                        {...register('address.street')}
+                      />
+                      <div className="w-full relative">
+                        <label className="flex flex-col text-white">
+                          CEP
+                          <Controller
+                            control={control}
+                            name="address.CEP"
+                            render={({ field: { onChange } }) => {
+                              return (
+                                <div className="w-full">
+                                  <InputMask
+                                    mask="99999-999"
+                                    placeholder="CEP"
+                                    className="default-input relative py-1 px-2 w-full"
+                                    onChange={(e) =>
+                                      onChange(
+                                        e.target.value
+                                          .replaceAll('.', '')
+                                          .replaceAll('-', '')
+                                          .replaceAll('_', ''),
+                                      )
+                                    }
+                                  />
+                                  <p className="text-red-400 text-sm mt-2">
+                                    {errors.address?.CEP?.message}
+                                  </p>
+                                </div>
+                              )
+                            }}
+                          />
+                        </label>
+                      </div>
+                      <Input
+                        placeholder="Número (ex: 52)"
+                        className="py-1 px-2"
+                        error={errors.address?.number}
+                        {...register('address.number')}
+                      />
+                      <Input
+                        placeholder="Complemento"
+                        className="py-1 px-2"
+                        error={errors.address?.additionalInfo}
+                        {...register('address.additionalInfo')}
+                      />
+                    </div>
 
-                    <div className="mt-4">
+                    <div className="mt-4 col-span-full">
                       <button
                         type="submit"
                         className="inline-flex justify-center items-center gap-2 rounded-md border border-white/5 bg-transparent hover:bg-white/5 px-4 py-2 text-sm text-white font-medium transition-colors disabled:bg-white/20 disabled:text-gray-500 disabled:cursor-not-allowed"
