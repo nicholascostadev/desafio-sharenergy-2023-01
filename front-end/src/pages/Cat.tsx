@@ -23,7 +23,7 @@ export const Cat = () => {
             />
           </div>
           <div className="flex justify-center items-center">
-            {status && (
+            {statusValue && (
               <img
                 src={`https://http.cat/${statusValue}`}
                 alt="Cat image corresponding to status code"
