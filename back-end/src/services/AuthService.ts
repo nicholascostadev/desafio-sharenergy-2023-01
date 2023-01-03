@@ -7,7 +7,7 @@ export class AuthService {
 
     // hardcoded for now
     if (login === 'desafiosharenergy' && password === 'sh@r3n3rgy') {
-      const token = jwt.sign({ login }, process.env.AUTH_SECRET ?? '', { expiresIn: '1d' })
+      const token = jwt.sign({ login }, process.env.AUTH_SECRET as string, { expiresIn: '1d' })
 
       return token
     }
