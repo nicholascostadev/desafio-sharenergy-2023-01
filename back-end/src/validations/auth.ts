@@ -2,11 +2,11 @@ import { z } from 'zod'
 
 export const loginSchema = z.object({
   login: z.string({
-    required_error: 'Login é obrigatório',
-    invalid_type_error: 'Login tem que ser to tipo `string`'
-  }).min(1, 'Login é obrigatório'),
+    required_error: 'Login is required',
+    invalid_type_error: 'Login has to be of type `string`'
+  }).min(1, 'Login id required'),
   password: z.string({
-    required_error: 'Senha é obrigatória',
-    invalid_type_error: 'Senha tem que ser to tipo `string`'
-  }).min(1, 'Senha é obrigatória')
+    required_error: 'Password is required',
+    invalid_type_error: 'Password has to be of type `string`'
+  }).min(1, 'Password is required')
 })
