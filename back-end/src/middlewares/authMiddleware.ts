@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies['shark-session']
+  const token = req.cookies['sharenergy-session']
 
   if (token == null) {
     return res.status(401).json({

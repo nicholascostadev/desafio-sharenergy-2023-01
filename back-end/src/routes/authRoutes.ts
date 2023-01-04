@@ -4,3 +4,5 @@ import { AuthController } from '../controllers/AuthController'
 export const authRoutes = Router()
 
 authRoutes.post('/login', AuthController.login)
+
+authRoutes.post('/validate', AuthController.validateToken)
