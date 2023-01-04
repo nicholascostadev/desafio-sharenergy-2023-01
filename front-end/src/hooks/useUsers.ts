@@ -4,17 +4,18 @@ import { Dispatch, SetStateAction } from 'react'
 
 type TUseUsersParams = {
   page: number
+  perPage: number
   setSeed: Dispatch<SetStateAction<string>>
   seed?: string
 }
 
-export const useUsers = ({ page, setSeed, seed }: TUseUsersParams) =>
+export const useUsers = ({ page, perPage, setSeed, seed }: TUseUsersParams) =>
   useQuery({
     queryKey: ['users', page],
     queryFn: () =>
       axios
         .get(
-          `https://randomuser.me/api/?page=${page}&results=20&seed=${seed}&inc=email,dob,login,name,picture`,
+          `https://randomuser.me/api/?page=${page}&results=${perPage}&seed=${seed}&inc=email,dob,login,name,picture`,
         )
         .then((res) => {
           setSeed(res.data.info.seed)
