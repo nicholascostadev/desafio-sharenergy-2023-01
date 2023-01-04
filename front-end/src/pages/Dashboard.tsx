@@ -1,4 +1,4 @@
-import { CaretLeft, CaretRight, SpinnerGap } from 'phosphor-react'
+import { SpinnerGap } from 'phosphor-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'
@@ -9,6 +9,7 @@ import { Navbar } from '../components/Navbar'
 import { Search } from '../components/Search'
 import { Table } from '../components/Table'
 import { useSession, useUsers } from '../hooks'
+import { Pagination } from '../components/Pagination'
 
 export const Dashboard = () => {
   const navigate = useNavigate()
@@ -20,8 +21,9 @@ export const Dashboard = () => {
   const [page, setPage] = useState(1)
   // seed comes from the first request, so needs to be set after the response
   const [seed, setSeed] = useState('')
+  const [perPage, setPerPage] = useState(20)
 
-  const { data, isFetching } = useUsers({ page, setSeed, seed })
+  const { data, isFetching } = useUsers({ page, perPage, setSeed, seed })
 
   const filteredUsers: User[] = data?.filter((user: User) => {
     switch (selectedFilter.toLowerCase()) {
@@ -90,24 +92,12 @@ export const Dashboard = () => {
                     'Idade',
                   ]}
                 />
-                <div className="flex justify-end gap-2 p-2">
-                  <p className="text-white">Página {page}</p>
-                  <button
-                    aria-label="Go back one page"
-                    className="text-gray-300 hover:text-white disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
-                    onClick={handleGoToPrevPage}
-                    disabled={page <= 1}
-                  >
-                    <CaretLeft size={20} />
-                  </button>
-                  <button
-                    aria-label="Go forwards one page"
-                    className="text-gray-300 hover:text-white"
-                    onClick={handleGoToNextPage}
-                  >
-                    <CaretRight size={20} />
-                  </button>
-                </div>
+                <Pagination
+                  page={page}
+                  perPage={perPage}
+                  onNextPage={handleGoToNextPage}
+                  onPrevPage={handleGoToPrevPage}
+                />
               </div>
             )}
           </div>
