@@ -9,4 +9,9 @@ export const loginSchema = z.object({
     required_error: 'Password is required',
     invalid_type_error: 'Password has to be of type `string`'
   }).min(1, 'Password is required')
+
+})
+
+export const querySchema = z.object({
+  persist: z.union([z.literal('true'), z.literal('false')]).optional().transform(val => val === 'true')
 })

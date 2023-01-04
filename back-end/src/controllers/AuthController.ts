@@ -1,21 +1,29 @@
 import { RequestHandler } from 'express'
 import { AuthService } from '../services/AuthService'
 import { ZodError } from 'zod'
-import { loginSchema } from '../validations/auth'
+import { loginSchema, querySchema } from '../validations/auth'
 
 export class AuthController {
   static login: RequestHandler = (req, res) => {
     try {
-      const loginInfo = loginSchema.parse(req.body)
-      const token = AuthService.login(loginInfo)
+      const { login, password } = loginSchema.parse(req.body)
+      const { persist } = querySchema.parse(req.query)
+      const token = AuthService.login({ login, password })
 
-      return res.status(200).cookie('shark-session', token,
-        {
-          expires: new Date(Date.now() + 900000),
-          path: '/'
-        }
-      ).json({
-        status: 'Success'
+      if (persist) {
+        return res.status(200).cookie('shark-session', token,
+          {
+            expires: new Date(Date.now() + 900000),
+            path: '/'
+          }
+        ).json({
+          message: 'Success'
+        })
+      }
+
+      return res.status(200).json({
+        message: 'Success',
+        data: token
       })
     } catch (error) {
       if (error instanceof ZodError) {
