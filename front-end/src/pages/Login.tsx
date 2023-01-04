@@ -1,57 +1,32 @@
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
+
 import { Input } from '../components/Input'
 import { useSession } from '../hooks'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { api } from '../libs/axios'
+import { AxiosInputError } from '../components/AxiosInputError'
 
-const loginSchema = z
-  .object({
-    username: z.string().min(1, 'Username is required'),
-    password: z.string().min(1, 'Password is required'),
-    'remember-me': z.boolean().default(false),
-  })
-  .refine(
-    (values) => values.password.length > 0 && values.username.length > 0,
-    {
-      message: 'Username and password are both required',
-      path: ['username'],
-    },
-  )
-  .refine(
-    (values) => values.password.length > 0 && values.username.length > 0,
-    {
-      message: 'Username and password are both required',
-      path: ['password'],
-    },
-  )
-  .refine(
-    (values) =>
-      values.password === 'sh@r3n3rgy' &&
-      values.username === 'desafiosharenergy',
-    {
-      message: 'Wrong email or password',
-      path: ['username'],
-    },
-  )
-  .refine(
-    (values) =>
-      values.password === 'sh@r3n3rgy' &&
-      values.username === 'desafiosharenergy',
-    {
-      message: 'Wrong email or password',
-      path: ['password'],
-    },
-  )
+const loginSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+  'remember-me': z.boolean().default(false),
+})
 
-type LoginData = z.infer<typeof loginSchema>
+type FormData = z.infer<typeof loginSchema>
+type LoginData = {
+  login: FormData['username']
+  password: FormData['password']
+}
 
 export const LoginPage = () => {
   const { username, handleSetUsername } = useSession()
-
   const navigate = useNavigate()
 
+  // refresh page for cookie to take effect
   useEffect(() => {
     if (username) navigate('/dashboard')
   }, [username, navigate])
@@ -59,20 +34,37 @@ export const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm<LoginData>({
+  } = useForm<FormData>({
     resolver: zodResolver(loginSchema),
     reValidateMode: 'onSubmit',
   })
 
-  const handleLogin = (data: LoginData) => {
-    if (data['remember-me']) {
-      handleSetUsername(data.username, true)
-    } else {
-      handleSetUsername(data.username)
-    }
+  const rememberMe = watch('remember-me')
 
-    return data
+  const {
+    mutate: login,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (loginData: LoginData) => {
+      return await api
+        .post(`/auth/login?persist=${rememberMe}`, loginData)
+        .then((res) => res.data)
+    },
+    onSuccess: (data) => {
+      handleSetUsername(data.data)
+      // refresh page for cookie to take effect
+      if (rememberMe) navigate(0)
+    },
+  })
+
+  const handleLogin = async (data: FormData) => {
+    login({
+      login: data.username,
+      password: data.password,
+    })
   }
 
   return (
@@ -87,14 +79,26 @@ export const LoginPage = () => {
             label="Username"
             error={errors.username}
             placeholder="Username"
+            className={
+              isError || errors.username
+                ? 'ring-red-500 focus:ring-red-500'
+                : ''
+            }
             {...register('username')}
           />
+          {isError && <AxiosInputError error={error} />}
           <Input
             label="Password"
             error={errors.password}
             placeholder="Password"
+            className={
+              isError || errors.password
+                ? 'ring-red-500 focus:ring-red-500'
+                : ''
+            }
             {...register('password')}
           />
+          {isError && <AxiosInputError error={error} />}
 
           <label className="flex gap-2 text-white">
             <input
