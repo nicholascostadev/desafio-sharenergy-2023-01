@@ -1,4 +1,4 @@
-import { Query } from '../@types/client'
+import { CreateProps, Query } from '../@types/client'
 import { prisma } from '../config/prisma'
 import { Client as ClientPrisma } from '@prisma/client'
 import { ClientModel } from './ClientModel'
@@ -11,6 +11,9 @@ export class ClientModelPrisma implements ClientModel {
           contains: query,
           mode: 'insensitive'
         }
+      },
+      include: {
+        address: true
       },
       skip: (page - 1) * perPage,
       take: perPage
@@ -33,6 +36,60 @@ export class ClientModelPrisma implements ClientModel {
     const client = await prisma.client.findUnique({
       where: {
         email
+      }
+    })
+
+    return client
+  }
+
+  create = async ({ name, email, address, cpf, telephone }: CreateProps): Promise<ClientPrisma> => {
+    const client = await prisma.client.create({
+      data: {
+        name,
+        email,
+        cpf,
+        telephone,
+        address: {
+          create: address
+        }
+      },
+      include: {
+        address: true
+      }
+    })
+
+    return client
+  }
+
+  update = async (id: string, { name, email, address, cpf, telephone }: CreateProps): Promise<ClientPrisma | null> => {
+    const client = await prisma.client.update({
+      where: {
+        id
+      },
+      data: {
+        name,
+        email,
+        cpf,
+        telephone,
+        address: {
+          update: address
+        }
+      },
+      include: {
+        address: true
+      }
+    })
+
+    return client
+  }
+
+  delete = async (id: string): Promise<ClientPrisma> => {
+    const client = await prisma.client.delete({
+      where: {
+        id
+      },
+      include: {
+        address: true
       }
     })
 

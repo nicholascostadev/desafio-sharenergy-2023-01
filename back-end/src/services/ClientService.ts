@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { querySchema } from '../validations/client'
+import { createClientSchema, querySchema } from '../validations/client'
 import { ClientModel } from '../models/ClientModel'
 
 export class ClientService {
@@ -19,14 +19,28 @@ export class ClientService {
     return clients
   }
 
-  getByEmail = async (req: Request) => {
-    // at this point, we know it's a string and can cast it
-    // because it's only called after we've validated the query
-    // params at the `get` method
-    const email = req.query.email as string
+  create = async (req: Request) => {
+    const { name, email, address, cpf, telephone } = createClientSchema.parse(req.body)
 
-    const clients = await this.clientModel.getByEmail(email)
+    const client = await this.clientModel.create({ name, email, address, cpf, telephone })
 
-    return clients
+    return client
+  }
+
+  update = async (req: Request) => {
+    const { clientId } = req.params
+    const { name, email, address, cpf, telephone } = createClientSchema.parse(req.body)
+
+    const updatedClient = await this.clientModel.update(clientId, { name, email, address, cpf, telephone })
+
+    return updatedClient
+  }
+
+  delete = async (req: Request) => {
+    const { clientId } = req.params
+
+    const deletedClient = await this.clientModel.delete(clientId)
+
+    return deletedClient
   }
 }

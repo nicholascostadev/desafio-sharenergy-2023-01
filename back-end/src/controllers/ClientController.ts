@@ -7,7 +7,7 @@ const model = new ClientModelPrisma()
 const clientService = new ClientService(model)
 
 export class ClientController {
-  static get: RequestHandler = async (req, res) => {
+  get: RequestHandler = async (req, res) => {
     try {
       const data = await clientService.get(req)
 
@@ -30,9 +30,57 @@ export class ClientController {
     }
   }
 
-  static getById: RequestHandler = async (req, res) => {
+  getById: RequestHandler = async (req, res) => {
     try {
       const data = await clientService.getById(req)
+
+      return res.status(200).json({
+        message: 'Success',
+        data
+      })
+    } catch (err) {
+      return res.status(400).json({
+        message: 'Error',
+        error: err
+      })
+    }
+  }
+
+  create: RequestHandler = async (req, res) => {
+    try {
+      const data = await clientService.create(req)
+
+      return res.status(200).json({
+        message: 'Success',
+        data
+      })
+    } catch (err) {
+      return res.status(400).json({
+        message: 'Error',
+        error: err
+      })
+    }
+  }
+
+  update: RequestHandler = async (req, res) => {
+    try {
+      const data = await clientService.update(req)
+
+      return res.status(200).json({
+        message: 'Success',
+        data
+      })
+    } catch (err) {
+      return res.status(400).json({
+        message: 'Error',
+        error: err
+      })
+    }
+  }
+
+  delete: RequestHandler = async (req, res) => {
+    try {
+      const data = await clientService.delete(req)
 
       return res.status(200).json({
         message: 'Success',

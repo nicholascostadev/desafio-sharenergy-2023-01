@@ -4,7 +4,14 @@ import { authMiddleware } from '../middlewares/authMiddleware'
 
 export const clientRoutes = Router()
 
-// .../clients
-clientRoutes.get('/', authMiddleware, ClientController.get)
+const clientController = new ClientController()
 
-clientRoutes.get('/:clientId', authMiddleware, ClientController.getById)
+clientRoutes.get('/', authMiddleware, clientController.get)
+
+clientRoutes.get('/:clientId', authMiddleware, clientController.getById)
+
+clientRoutes.post('/', authMiddleware, clientController.create)
+
+clientRoutes.put('/:clientId', authMiddleware, clientController.update)
+
+clientRoutes.delete('/:clientId', authMiddleware, clientController.delete)
