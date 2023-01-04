@@ -23,10 +23,9 @@ type LoginData = {
 }
 
 export const LoginPage = () => {
-  const { username, handleSetUsername } = useSession()
+  const { username } = useSession()
   const navigate = useNavigate()
 
-  // refresh page for cookie to take effect
   useEffect(() => {
     if (username) navigate('/dashboard')
   }, [username, navigate])
@@ -53,10 +52,9 @@ export const LoginPage = () => {
         .post(`/auth/login?persist=${rememberMe}`, loginData)
         .then((res) => res.data)
     },
-    onSuccess: (data) => {
-      handleSetUsername(data.data)
+    onSuccess: () => {
       // refresh page for cookie to take effect
-      if (rememberMe) navigate(0)
+      navigate(0)
     },
   })
 
