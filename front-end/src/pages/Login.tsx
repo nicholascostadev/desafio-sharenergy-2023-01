@@ -3,23 +3,16 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { z } from 'zod'
 
 import { Input } from '../components/Input'
 import { useSession } from '../hooks'
 import { api } from '../libs/axios'
 import { AxiosInputError } from '../components/AxiosInputError'
+import { LoginFormData, loginSchema } from '../validations/forms'
 
-const loginSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  password: z.string().min(1, 'Password is required'),
-  'remember-me': z.boolean().default(false),
-})
-
-type FormData = z.infer<typeof loginSchema>
 type LoginData = {
-  login: FormData['username']
-  password: FormData['password']
+  login: LoginFormData['username']
+  password: LoginFormData['password']
 }
 
 export const LoginPage = () => {
@@ -35,7 +28,7 @@ export const LoginPage = () => {
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     reValidateMode: 'onSubmit',
   })
@@ -58,7 +51,7 @@ export const LoginPage = () => {
     },
   })
 
-  const handleLogin = async (data: FormData) => {
+  const handleLogin = async (data: LoginFormData) => {
     login({
       login: data.username,
       password: data.password,
