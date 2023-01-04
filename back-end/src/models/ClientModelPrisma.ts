@@ -1,10 +1,13 @@
-import { CreateProps, Query } from '../@types/client'
+import { CreateProps, PaginatedGetReturn, Query } from '../@types/client'
 import { prisma } from '../config/prisma'
 import { Client as ClientPrisma } from '@prisma/client'
 import { ClientModel } from './ClientModel'
 
 export class ClientModelPrisma implements ClientModel {
-  getAll = async ({ filter, query, page, perPage }: Query): Promise<ClientPrisma[]> => {
+  getAll = async ({ filter, query, page, perPage }: Query): Promise<PaginatedGetReturn> => {
+    const take = perPage ?? 10
+    const skip = ((page ?? 1) - 1) * take
+
     const clients = await prisma.client.findMany({
       where: {
         [filter]: {
@@ -15,11 +18,14 @@ export class ClientModelPrisma implements ClientModel {
       include: {
         address: true
       },
-      skip: (page - 1) * perPage,
-      take: perPage
+      skip,
+      take
     })
 
-    return clients
+    const clientsCount = await prisma.client.count()
+    const totalPages = Math.ceil(clientsCount / take)
+
+    return { clients, totalPages }
   }
 
   getById = async (clientId: string): Promise<ClientPrisma | null> => {
