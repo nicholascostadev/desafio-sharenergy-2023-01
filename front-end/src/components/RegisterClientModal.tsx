@@ -3,45 +3,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Spinner } from 'phosphor-react'
 import { Fragment } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { Input } from './Input'
-import { validateCPF } from '../utils/cpfValidator'
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'Nome tem que ter pelo menos 1 caractere')
-    .max(60, 'Nome pode ter no máximo 60 caracteres'),
-  email: z.string().min(1, 'E-mail é obrigatório').email('E-mail inválido'),
-  telephone: z
-    .string()
-    .min(1, 'Telefone é obrigatório')
-    .refine(
-      (val) => {
-        console.log(val)
-        return val.length === 11
-      },
-      {
-        message: 'Telefone inválido',
-      },
-    ),
-  CPF: z.string().length(11, 'CPF deve ter 11 dígitos').refine(validateCPF, {
-    message: 'CPF informado não existe',
-  }),
-  address: z.object({
-    CEP: z.string().length(8, 'CEP deve ter 8 dígitos'),
-    street: z.string().min(1, 'Rua é obrigatória'),
-    number: z.string().min(1, 'Número é obrigatório'),
-    additionalInfo: z.string().optional(),
-  }),
-})
-
-export type FormData = z.infer<typeof formSchema>
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '../libs/axios'
+import { Client } from '../@types/client'
+import { formSchema, ClientModalFormData } from '../validations/forms'
 
 type ModalProps = {
   closeModal: () => void
   isOpen: boolean
-  initialData?: FormData
+  initialData?: Client
 }
 
 export const RegisterClientModal = ({
@@ -55,16 +26,61 @@ export const RegisterClientModal = ({
     formState: { errors, isSubmitting },
     control,
     reset,
-  } = useForm<FormData>({
+  } = useForm<ClientModalFormData>({
     resolver: zodResolver(formSchema),
     mode: 'onChange',
     reValidateMode: 'onChange',
-    values: initialData,
+    defaultValues: {
+      address: {
+        additionalInfo: '',
+      },
+    },
+    values: initialData
+      ? {
+          ...initialData,
+          address: {
+            ...initialData.address,
+            additionalInfo: initialData.address.additionalInfo || '',
+          },
+        }
+      : undefined,
   })
 
-  const handleAddClient = (data: FormData) => {
-    closeModal()
-    reset()
+  const queryClient = useQueryClient()
+  const { mutate: createClient } = useMutation({
+    mutationFn: async (clientData: ClientModalFormData) => {
+      return await api.post('/clients', clientData).then((res) => res.data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['clients'],
+      })
+      closeModal()
+      reset()
+    },
+  })
+
+  const { mutate: sendEditedUserData } = useMutation({
+    mutationFn: async (clientData: ClientModalFormData & { id: string }) => {
+      return await api
+        .put(`/clients/${initialData?.id}`, clientData)
+        .then((res) => res.data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['clients'],
+      })
+      closeModal()
+      reset()
+    },
+  })
+
+  const handleAddClient = (data: ClientModalFormData) => {
+    if (initialData) {
+      sendEditedUserData(data as Client)
+    } else {
+      createClient(data)
+    }
   }
 
   return (
@@ -76,14 +92,18 @@ export const RegisterClientModal = ({
           onClose={() => {
             closeModal()
             reset({
-              name: '',
-              email: '',
+              cpf: '',
               telephone: '',
-              CPF: '',
+              email: '',
+              name: '',
               address: {
+                additionalInfo: '',
+                city: '',
+                neighborhood: '',
                 number: '',
-                CEP: '',
+                state: '',
                 street: '',
+                zipCode: '',
               },
             })
           }}
@@ -165,14 +185,14 @@ export const RegisterClientModal = ({
                     />
                     <Controller
                       control={control}
-                      name="CPF"
+                      name="cpf"
                       render={({ field: { onChange } }) => {
                         return (
                           <Input
                             mask="999.999.999-99"
                             placeholder="CPF"
                             label="CPF do cliente"
-                            defaultValue={initialData?.CPF}
+                            defaultValue={initialData?.cpf}
                             className="default-input relative py-1 px-2 w-full"
                             onChange={(e) =>
                               onChange(
@@ -182,7 +202,7 @@ export const RegisterClientModal = ({
                                   .replaceAll('_', ''),
                               )
                             }
-                            error={errors.CPF}
+                            error={errors.cpf}
                           />
                         )
                       }}
@@ -190,23 +210,47 @@ export const RegisterClientModal = ({
                     <div className="grid grid-cols-2 w-full col-span-full gap-4">
                       <h3 className="col-span-full text-white">Endereço</h3>
                       <Input
+                        placeholder="Estado"
+                        label="Estado do cliente"
+                        className="py-1 px-2"
+                        error={errors.address?.street}
+                        defaultValue={initialData?.address?.street ?? ''}
+                        {...register('address.state')}
+                      />
+                      <Input
+                        placeholder="Cidade"
+                        label="Cidade do cliente"
+                        className="py-1 px-2"
+                        error={errors.address?.street}
+                        defaultValue={initialData?.address?.street ?? ''}
+                        {...register('address.city')}
+                      />
+                      <Input
                         placeholder="Rua"
-                        label="Rua"
+                        label="Rua do cliente"
                         className="py-1 px-2"
                         error={errors.address?.street}
                         defaultValue={initialData?.address?.street ?? ''}
                         {...register('address.street')}
                       />
+                      <Input
+                        placeholder="Bairro"
+                        label="Bairro do cliente"
+                        className="py-1 px-2"
+                        error={errors.address?.street}
+                        defaultValue={initialData?.address?.street ?? ''}
+                        {...register('address.neighborhood')}
+                      />
                       <Controller
                         control={control}
-                        name="address.CEP"
+                        name="address.zipCode"
                         render={({ field: { onChange } }) => {
                           return (
                             <Input
                               mask="99999-999"
                               placeholder="CEP"
                               className="default-input relative py-1 px-2 w-full"
-                              defaultValue={initialData?.address?.CEP}
+                              defaultValue={initialData?.address?.zipCode}
                               onChange={(e) =>
                                 onChange(
                                   e.target.value
@@ -216,13 +260,14 @@ export const RegisterClientModal = ({
                                 )
                               }
                               label="CEP do cliente"
-                              error={errors.address?.CEP}
+                              error={errors.address?.zipCode}
                             />
                           )
                         }}
                       />
                       <Input
                         placeholder="Número (ex: 52)"
+                        label="Número da residência do cliente"
                         className="py-1 px-2"
                         error={errors.address?.number}
                         defaultValue={initialData?.address?.number ?? ''}
@@ -230,6 +275,7 @@ export const RegisterClientModal = ({
                       />
                       <Input
                         placeholder="Complemento"
+                        label="Complemento"
                         className="py-1 px-2"
                         error={errors.address?.additionalInfo}
                         defaultValue={
