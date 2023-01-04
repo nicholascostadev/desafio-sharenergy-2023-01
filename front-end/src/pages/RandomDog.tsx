@@ -2,12 +2,16 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import classNames from 'classnames'
 import { ArrowsCounterClockwise } from 'phosphor-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { Container } from '../components/Container'
 import { Navbar } from '../components/Navbar'
+import { useSession } from '../hooks'
+import { useNavigate } from 'react-router-dom'
 
 export const RandomDog = () => {
+  const { username, isLoading } = useSession()
   const [isVideo, setIsVideo] = useState(false)
+  const navigate = useNavigate()
   const getImageSrc = useCallback((data: any) => {
     // find the img src, since I don't want to use the HTML from the website as it may be unsafe
     const src =
@@ -33,6 +37,10 @@ export const RandomDog = () => {
 
     return src
   }, [])
+
+  useEffect(() => {
+    if (!username && !isLoading) navigate('/')
+  }, [username, isLoading, navigate])
 
   const { data, isFetching, refetch } = useQuery<string>({
     queryKey: ['dog'],

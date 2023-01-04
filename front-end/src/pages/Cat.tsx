@@ -1,12 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDebounce } from 'use-debounce'
 import { Container } from '../components/Container'
 import { Input } from '../components/Input'
 import { Navbar } from '../components/Navbar'
+import { useSession } from '../hooks/useSession'
+import { useNavigate } from 'react-router-dom'
 
 export const Cat = () => {
+  const { username, isLoading } = useSession()
   const [status, setStatus] = useState<string | null>(null)
   const [statusValue] = useDebounce(status, 800)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!username && !isLoading) navigate('/')
+  }, [username, isLoading, navigate])
 
   return (
     <>
