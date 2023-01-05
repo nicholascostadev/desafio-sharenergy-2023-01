@@ -49,6 +49,9 @@ export const LoginPage = () => {
       // refresh page for cookie to take effect
       navigate(0)
     },
+    onError: (err) => {
+      console.log(err)
+    },
   })
 
   const handleLogin = async (data: LoginFormData) => {

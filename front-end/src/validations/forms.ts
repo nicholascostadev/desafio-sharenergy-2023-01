@@ -12,7 +12,6 @@ export const formSchema = z.object({
     .min(1, 'Telefone é obrigatório')
     .refine(
       (val) => {
-        console.log(val)
         return val.length === 11
       },
       {
