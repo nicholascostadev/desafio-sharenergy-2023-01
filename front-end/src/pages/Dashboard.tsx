@@ -65,6 +65,10 @@ export const Dashboard = () => {
     setSelectedFilter(newFilter)
   }
 
+  const handleResetPage = () => {
+    setPage(0)
+  }
+
   useEffect(() => {
     if (!username && !isSessionLoading) navigate('/')
   }, [username, isSessionLoading, navigate])
@@ -79,10 +83,24 @@ export const Dashboard = () => {
           <div>
             <Search
               title="Procurar por:"
-              searchByOptions={['Nome', 'Email', 'Username']}
+              searchByOptions={[
+                {
+                  value: 'Nome',
+                  filterInQuery: 'name',
+                },
+                {
+                  value: 'Email',
+                  filterInQuery: 'email',
+                },
+                {
+                  value: 'Username',
+                  filterInQuery: 'username',
+                },
+              ]}
               filter={selectedFilter}
               changeSearch={changeSearch}
               changeFilter={changeFilter}
+              resetPageOnChange={handleResetPage}
             />
             {isFetching && (
               <div className="w-full flex justify-center items-center mt-4">

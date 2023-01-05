@@ -8,9 +8,10 @@ import { api } from '../libs/axios'
 import { useSession } from '../hooks'
 import { Link, useNavigate } from 'react-router-dom'
 import { Client } from '../@types/client'
-import classNames from 'classnames'
 import { ClientModalFormData } from '../validations/forms'
 import { Pagination } from '../components/Pagination'
+import { Search } from '../components/Search'
+import { useDebounce } from 'use-debounce'
 
 const titles = [
   'CPF',
@@ -30,6 +31,12 @@ export const Clients = () => {
   >(undefined)
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
+  const [selectedFilter, setSelectedFilter] = useState('name')
+  const [search, setSearch] = useState('')
+  // debounced value of search(after 500ms set to the current value of the state)
+  const [searchValue] = useDebounce(search, 500)
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const handleGoToPrevPage = () => {
     if (page - 1 >= 1) setPage((page) => page - 1)
@@ -38,8 +45,6 @@ export const Clients = () => {
   const handleGoToNextPage = () => {
     setPage((page) => page + 1)
   }
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (!username && !isLoading) navigate('/')
@@ -51,15 +56,15 @@ export const Clients = () => {
       totalPages: number
     }
   }>({
-    queryKey: ['clients', page],
+    queryKey: ['clients', page, selectedFilter, searchValue],
     queryFn: async () =>
       api
-        .get(`/clients?perPage=${perPage}&page=${page}`)
+        .get(
+          `/clients?perPage=${perPage}&page=${page}&filter=${selectedFilter}&query=${searchValue}`,
+        )
         .then((res) => res.data),
     staleTime: 1000 * 60 * 15, // 15 minutes
   })
-
-  const queryClient = useQueryClient()
 
   const { mutate: deleteClient } = useMutation({
     mutationFn: async (clientId: string) => {
@@ -88,8 +93,21 @@ export const Clients = () => {
     deleteClient(clientId)
   }
 
+  const handleChangeSearch = (newSearch: string) => {
+    setSearch(newSearch.toLowerCase())
+  }
+
+  const handleChangeFilter = (newFilter: string) => {
+    setSelectedFilter(newFilter)
+  }
+
+  const handleResetPage = () => {
+    setPage(1)
+  }
+
   const fullAddress = (client: Client) =>
     `${client.address.street}, ${client.address.number}`
+
   return (
     <>
       <div className="bg-page-gradient">
@@ -103,12 +121,25 @@ export const Clients = () => {
         <Container className="min-h-[calc(100vh-64px)] w-[1600px] mt-16 pt-4">
           <h2 className="text-white text-2xl">Clientes</h2>
 
-          <div
-            className={classNames(
-              'flex justify-end items-center',
-              isFetching && 'justify-between',
-            )}
-          >
+          <div className={'flex justify-between items-start mt-6'}>
+            <Search
+              title="Procurar por:"
+              searchByOptions={[
+                {
+                  value: 'Nome',
+                  filterInQuery: 'name',
+                },
+                {
+                  value: 'Email',
+                  filterInQuery: 'email',
+                },
+              ]}
+              filter={selectedFilter}
+              changeFilter={handleChangeFilter}
+              changeSearch={handleChangeSearch}
+              resetPageOnChange={handleResetPage}
+              className="w-[90%]"
+            />
             {isFetching && (
               <div className="flex justify-center items-center">
                 <Spinner size={24} className="animate-spin text-white" />
