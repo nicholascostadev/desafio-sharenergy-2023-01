@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react'
 import { Container } from '../components/Container'
 import { RegisterClientModal } from '../components/RegisterClientModal'
 import { Navbar } from '../components/Navbar'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../libs/axios'
 import { useSession } from '../hooks'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Client } from '../@types/client'
 import classNames from 'classnames'
 import { ClientModalFormData } from '../validations/forms'
@@ -29,7 +29,7 @@ export const Clients = () => {
     ClientModalFormData | undefined
   >(undefined)
   const [page, setPage] = useState(1)
-  const [perPage, setPerPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
 
   const handleGoToPrevPage = () => {
     if (page - 1 >= 1) setPage((page) => page - 1)
@@ -59,6 +59,17 @@ export const Clients = () => {
     staleTime: 1000 * 60 * 15, // 15 minutes
   })
 
+  const queryClient = useQueryClient()
+
+  const { mutate: deleteClient } = useMutation({
+    mutationFn: async (clientId: string) => {
+      await api.delete(`/clients/${clientId}`).then((res) => res.data)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['clients'])
+    },
+  })
+
   const closeModal = () => {
     setCurrentClient(undefined)
     setIsModalOpen(false)
@@ -71,6 +82,10 @@ export const Clients = () => {
   const editCurrentClient = (client: Client) => {
     setCurrentClient(client)
     setIsModalOpen(true)
+  }
+
+  const handleDeleteClient = (clientId: string) => {
+    deleteClient(clientId)
   }
 
   const fullAddress = (client: Client) =>
@@ -125,35 +140,38 @@ export const Clients = () => {
                 </tr>
               </thead>
               <tbody className="text-gray-300 text-base">
-                {response?.data.clients.map((user) => (
-                  <tr
-                    key={user.cpf}
-                    className="hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <td className="p-2 text-center min-w-[155px]">
-                      <button className="p-4 transition-colors hover:text-blue-400">
+                {response?.data.clients.map((client) => (
+                  <tr key={client.cpf}>
+                    <td className="p-2 flex justify-center items-center min-w-[155px]">
+                      <Link
+                        to={`/dashboard/clients/${client.id}`}
+                        className="p-4 transition-colors hover:text-blue-400"
+                      >
                         <span className="sr-only">Read more</span>
                         <Article size={24} />
-                      </button>
-                      <button className="p-4 transition-colors hover:text-red-400">
+                      </Link>
+                      <button
+                        className="p-4 transition-colors hover:text-red-400"
+                        onClick={() => handleDeleteClient(client.id)}
+                      >
                         <span className="sr-only">Delete client</span>
                         <Trash size={24} />
                       </button>
                       <button
                         className="p-4 transition-colors hover:text-indigo-400"
-                        onClick={() => editCurrentClient(user)}
+                        onClick={() => editCurrentClient(client)}
                       >
                         <span className="sr-only">Edit client</span>
                         <PencilLine size={24} />
                       </button>
                     </td>
-                    <td className="p-2">{user.cpf}</td>
-                    <td className="p-2">{user.name}</td>
-                    <td className="p-2">{user.email}</td>
-                    <td className="p-2">{user.telephone}</td>
-                    <td className="p-2">{user.address.zipCode}</td>
-                    <td className="p-2">{fullAddress(user)}</td>
-                    <td className="p-2">{user.address.additionalInfo}</td>
+                    <td className="p-2">{client.cpf}</td>
+                    <td className="p-2">{client.name}</td>
+                    <td className="p-2">{client.email}</td>
+                    <td className="p-2">{client.telephone}</td>
+                    <td className="p-2">{client.address.zipCode}</td>
+                    <td className="p-2">{fullAddress(client)}</td>
+                    <td className="p-2">{client.address.additionalInfo}</td>
                   </tr>
                 ))}
               </tbody>
