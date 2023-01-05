@@ -12,6 +12,7 @@ import { ClientModalFormData } from '../validations/forms'
 import { ClientPageActionButtons } from '../components/pages/ClientPage/ActionButtons'
 import { TableRow } from '../components/pages/ClientPage/TableRow'
 import { isDateKey } from '../utils/isDateKey'
+import { ErrorText } from '../components/ErrorText'
 
 export const ClientPage = () => {
   const { clientId } = useParams()
@@ -91,7 +92,7 @@ export const ClientPage = () => {
                   </p>
                 )}
                 {hasErrored && !deleted && (
-                  <p className="text-red-400 text-lg">
+                  <ErrorText className="text-lg">
                     Cliente não encontrado,{' '}
                     <Link
                       to="/dashboard/clients"
@@ -99,7 +100,7 @@ export const ClientPage = () => {
                     >
                       Voltar
                     </Link>
-                  </p>
+                  </ErrorText>
                 )}
 
                 {isInitialLoading && !deleted && (

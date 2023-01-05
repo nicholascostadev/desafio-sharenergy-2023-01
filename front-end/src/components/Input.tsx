@@ -8,6 +8,7 @@ import {
 } from 'react'
 import { FieldError } from 'react-hook-form'
 import InputMask from 'react-input-mask'
+import { ErrorText } from './ErrorText'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   mask?: string
@@ -54,7 +55,9 @@ const InputBase: ForwardRefRenderFunction<any, InputProps> = (
               'text-white absolute right-4 top-[50%] translate-y-[-50%]',
           })}
 
-        {error && <p className="text-red-400 text-sm mt-2">{error.message}</p>}
+        {error && (
+          <ErrorText className="text-sm mt-2">{error.message}</ErrorText>
+        )}
       </div>
     )
   }
