@@ -32,6 +32,9 @@ export class ClientModelPrisma implements ClientModel {
     const client = await prisma.client.findUnique({
       where: {
         id: clientId
+      },
+      include: {
+        address: true
       }
     })
 
