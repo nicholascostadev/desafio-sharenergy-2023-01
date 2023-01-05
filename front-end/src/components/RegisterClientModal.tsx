@@ -292,9 +292,7 @@ export const RegisterClientModal = ({
                       <button
                         type="submit"
                         className="inline-flex justify-center items-center gap-2 rounded-md border border-white/5 bg-transparent hover:bg-white/5 px-4 py-2 text-sm text-white font-medium transition-colors disabled:bg-white/20 disabled:text-gray-500 disabled:cursor-not-allowed"
-                        disabled={
-                          isSubmitting || Object.keys(errors).length > 0
-                        }
+                        disabled={isSubmitting}
                       >
                         {isSubmitting && (
                           <Spinner className="animate-spin" size={16} />
