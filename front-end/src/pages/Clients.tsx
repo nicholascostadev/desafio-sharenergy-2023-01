@@ -121,7 +121,7 @@ export const Clients = () => {
         <Container className="min-h-[calc(100vh-64px)] w-[1600px] mt-16 pt-4">
           <h2 className="text-white text-2xl">Clientes</h2>
 
-          <div className={'flex justify-between items-start mt-6'}>
+          <div className={'flex justify-between items-start mt-6 gap-4'}>
             <Search
               title="Procurar por:"
               searchByOptions={[
@@ -138,7 +138,7 @@ export const Clients = () => {
               changeFilter={handleChangeFilter}
               changeSearch={handleChangeSearch}
               resetPageOnChange={handleResetPage}
-              className="w-[90%]"
+              className="flex-1"
             />
             {isFetching && (
               <div className="flex justify-center items-center">
@@ -149,7 +149,7 @@ export const Clients = () => {
               className="text-white flex justify-center items-center gap-2 p-2 rounded-md border border-white/5 shadow-md transition-colors bg-slate-900 hover:bg-white/5"
               onClick={openModal}
             >
-              <span className="sr-only">Register new client</span>
+              <p className="hidden sm:inline">Registrar cliente</p>
               <Plus size={18} />
             </button>
           </div>
