@@ -39,6 +39,16 @@ export const Dashboard = () => {
     }
   })
 
+  const rows = filteredUsers?.map((user) =>
+    [
+      user.picture.medium,
+      user.login.username,
+      `${user.name.first} ${user.name.last}`,
+      user.email,
+      user.dob.age,
+    ].map(String),
+  )
+
   const handleGoToPrevPage = () => {
     if (page - 1 >= 1) setPage((page) => page - 1)
   }
@@ -83,7 +93,7 @@ export const Dashboard = () => {
             {filteredUsers && (
               <div className="border border-white/5 rounded-md w-full shadow-lg bg-glass-gradient overflow-x-auto">
                 <Table
-                  data={filteredUsers}
+                  rows={rows}
                   titles={[
                     'Foto de perfil',
                     'Username',
