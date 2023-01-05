@@ -20,7 +20,8 @@ export const Pagination = ({
   return (
     <div className="flex justify-end items-center gap-2 p-2">
       <p className="text-white">
-        Mostrando {showing} - {to} {totalPages && ` de ${totalPages} páginas`}
+        Mostrando {showing} - {to}{' '}
+        {totalPages && ` de ${totalPages} página${totalPages > 1 ? 's' : ''}`}
       </p>
       <button
         name="Go back one page"
