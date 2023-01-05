@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import { router } from './routes'
 dotenv.config()
 
-const PORT = 4444
+const PORT = process.env.PORT ?? 4444
 const app = express()
 app.use(cors({
   origin: 'http://localhost:5173',
