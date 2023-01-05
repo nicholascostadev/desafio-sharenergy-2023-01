@@ -16,7 +16,7 @@ export class AuthController {
 
       return res.status(200)
         .setHeader('Access-Control-Allow-Credentials', 'true')
-        .setHeader('Access-Control-Allow-Origin', 'http://localhost:5173')
+        .setHeader('Access-Control-Allow-Origin', process.env.PROD === 'true' ? process.env.FRONTEND_URL as string : 'http://localhost:5173')
         .json({
           message: 'Success'
         })
