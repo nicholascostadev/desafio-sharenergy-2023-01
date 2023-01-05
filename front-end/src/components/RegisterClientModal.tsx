@@ -216,7 +216,7 @@ export const RegisterClientModal = ({
                         placeholder="Estado"
                         label="Estado do cliente"
                         className="py-1 px-2"
-                        error={errors.address?.street}
+                        error={errors.address?.state}
                         defaultValue={initialData?.address?.street ?? ''}
                         {...register('address.state')}
                       />
@@ -224,7 +224,7 @@ export const RegisterClientModal = ({
                         placeholder="Cidade"
                         label="Cidade do cliente"
                         className="py-1 px-2"
-                        error={errors.address?.street}
+                        error={errors.address?.city}
                         defaultValue={initialData?.address?.street ?? ''}
                         {...register('address.city')}
                       />
@@ -240,7 +240,7 @@ export const RegisterClientModal = ({
                         placeholder="Bairro"
                         label="Bairro do cliente"
                         className="py-1 px-2"
-                        error={errors.address?.street}
+                        error={errors.address?.neighborhood}
                         defaultValue={initialData?.address?.street ?? ''}
                         {...register('address.neighborhood')}
                       />
