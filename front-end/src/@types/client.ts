@@ -22,3 +22,8 @@ export type Client = {
   addressId: string
   address: Address
 }
+
+export interface GetClientResponse {
+  message: string
+  data: Client | null
+}

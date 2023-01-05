@@ -10,12 +10,23 @@
   
   .login-label {
     @apply text-white text-lg
-
   }
+
 }
 @layer base {
   body {
     @apply bg-slate-900
   }
-}
 
+  input[type="number"].input-w-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"].input-w-arrow::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+ 
+
+}
