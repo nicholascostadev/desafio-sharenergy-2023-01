@@ -14,12 +14,9 @@ export class AuthController {
         expires: persist ? new Date(Date.now() + 86400000) : undefined // 24 hours or only until browser is closed
       })
 
-      return res.status(200)
-        .setHeader('Access-Control-Allow-Credentials', 'true')
-        .setHeader('Access-Control-Allow-Origin', process.env.PROD === 'true' ? process.env.FRONTEND_URL as string : 'http://localhost:5173')
-        .json({
-          message: 'Success'
-        })
+      return res.status(200).json({
+        message: 'Success'
+      })
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(400).json({

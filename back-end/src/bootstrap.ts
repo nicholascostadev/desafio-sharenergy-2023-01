@@ -3,14 +3,16 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { router } from './routes'
+import { corsMiddleware } from './middlewares/corsMiddleware'
 dotenv.config()
 
 const PORT = process.env.PORT ?? 4444
 const app = express()
 app.use(cors({
-  origin: ['http://localhost:5173', process.env.FRONTEND_URL as string],
+  origin: process.env.PROD === 'true' ? process.env.FRONTEND_URL as string : 'http://localhost:5173',
   credentials: true
 }))
+app.use(corsMiddleware)
 app.use(cookieParser())
 app.use(express.json())
 
