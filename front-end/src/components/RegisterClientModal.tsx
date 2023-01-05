@@ -70,6 +70,9 @@ export const RegisterClientModal = ({
       queryClient.invalidateQueries({
         queryKey: ['clients'],
       })
+      queryClient.invalidateQueries({
+        queryKey: ['client'],
+      })
       closeModal()
       reset()
     },

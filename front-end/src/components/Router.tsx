@@ -4,6 +4,7 @@ import { Clients } from '../pages/Clients'
 import { Dashboard } from '../pages/Dashboard'
 import { LoginPage } from '../pages/Login'
 import { RandomDog } from '../pages/RandomDog'
+import { ClientPage } from '../pages/ClientPage'
 
 export const router = createBrowserRouter([
   {
@@ -25,5 +26,9 @@ export const router = createBrowserRouter([
   {
     path: '/dashboard/clients',
     element: <Clients />,
+  },
+  {
+    path: '/dashboard/clients/:clientId',
+    element: <ClientPage />,
   },
 ])
