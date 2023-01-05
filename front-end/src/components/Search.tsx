@@ -1,13 +1,21 @@
 import { MagnifyingGlass } from 'phosphor-react'
 import { FilterOpts } from '../@types/filter'
 import { Input } from './Input'
+import { ChangeEvent } from 'react'
+
+type Option = {
+  value: string
+  filterInQuery: string
+}
 
 type SearchProps = {
   title: string
   filter: string
-  searchByOptions: string[]
+  searchByOptions: Option[]
   changeSearch: (newSearch: string) => void
   changeFilter: (newFilter: FilterOpts) => void
+  resetPageOnChange: () => void
+  className?: string
 }
 
 export const Search = ({
@@ -16,31 +24,35 @@ export const Search = ({
   searchByOptions,
   changeSearch,
   changeFilter,
+  resetPageOnChange,
+  className,
 }: SearchProps) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (resetPageOnChange) resetPageOnChange()
+    changeSearch(e.target.value)
+  }
   return (
-    <div>
+    <div className={className}>
       <div className="flex w-full">
         <Input
           placeholder="Pesquise aqui"
           className="placeholder:text-base text-base flex-1 mt-0 h-full p-3"
-          onChange={(e) => changeSearch(e.target.value)}
+          onChange={handleInputChange}
           rightIcon={<MagnifyingGlass size={20} />}
         />
       </div>
       <div className="flex flex-col sm:flex-row text-white text-sm gap-2 border border-white/5 shadow-lg p-2 rounded-md my-2">
         <h3 className="text-lg">{title}</h3>
-        {searchByOptions.map((option) => (
-          <label key={option} className="flex gap-1 items-center text-base">
+        {searchByOptions.map(({ value, filterInQuery }) => (
+          <label key={value} className="flex gap-1 items-center text-base">
             <input
               type="radio"
-              value={option}
+              value={value}
               name="filter"
-              onChange={(e) =>
-                changeFilter(e.target.value.toLowerCase() as FilterOpts)
-              }
-              defaultChecked={filter === option || option === 'Nome'}
+              onChange={() => changeFilter(filterInQuery as FilterOpts)}
+              defaultChecked={filter === filterInQuery}
             />
-            {option}
+            {value}
           </label>
         ))}
       </div>
