@@ -69,6 +69,10 @@ export const Dashboard = () => {
     setPage(0)
   }
 
+  const handleChangePerPage = (newPerPage: number) => {
+    setPerPage(newPerPage)
+  }
+
   useEffect(() => {
     if (!username && !isSessionLoading) navigate('/')
   }, [username, isSessionLoading, navigate])
@@ -125,6 +129,7 @@ export const Dashboard = () => {
                   perPage={perPage}
                   onNextPage={handleGoToNextPage}
                   onPrevPage={handleGoToPrevPage}
+                  onPerPageChange={handleChangePerPage}
                 />
               </div>
             )}

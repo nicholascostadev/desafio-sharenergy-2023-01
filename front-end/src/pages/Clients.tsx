@@ -56,7 +56,7 @@ export const Clients = () => {
       totalPages: number
     }
   }>({
-    queryKey: ['clients', page, selectedFilter, searchValue],
+    queryKey: ['clients', page, perPage, selectedFilter, searchValue],
     queryFn: async () =>
       api
         .get(
@@ -103,6 +103,10 @@ export const Clients = () => {
 
   const handleResetPage = () => {
     setPage(1)
+  }
+
+  const handleChangePerPage = (newPerPage: number) => {
+    setPerPage(newPerPage)
   }
 
   const fullAddress = (client: Client) =>
@@ -209,10 +213,11 @@ export const Clients = () => {
             </table>
             <Pagination
               page={page}
+              totalPages={response?.data.totalPages}
               perPage={perPage}
               onNextPage={handleGoToNextPage}
               onPrevPage={handleGoToPrevPage}
-              totalPages={response?.data.totalPages}
+              onPerPageChange={handleChangePerPage}
             />
           </div>
         </Container>

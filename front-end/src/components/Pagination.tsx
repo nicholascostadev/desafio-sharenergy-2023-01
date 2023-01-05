@@ -1,11 +1,13 @@
 import { CaretLeft, CaretRight } from 'phosphor-react'
+import { FormEvent, useRef } from 'react'
 
 type PaginationProps = {
   page: number
-  onNextPage: () => void
-  onPrevPage: () => void
   totalPages?: number
   perPage: number
+  onNextPage: () => void
+  onPrevPage: () => void
+  onPerPageChange: (newPerPage: number) => void
 }
 
 export const Pagination = ({
@@ -14,13 +16,31 @@ export const Pagination = ({
   onPrevPage,
   totalPages,
   perPage,
+  onPerPageChange,
 }: PaginationProps) => {
+  const perPageRef = useRef<HTMLInputElement>(null)
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (perPageRef.current) {
+      const newPerPage = Number(perPageRef.current.value)
+      if (newPerPage > 0) onPerPageChange(newPerPage)
+    }
+  }
+
   const showing = page * perPage - perPage + 1
   const to = page * perPage
   return (
     <div className="flex justify-end items-center gap-2 p-2">
       <p className="text-white">
-        Mostrando {showing} - {to}{' '}
+        Mostrando de {showing} a{' '}
+        <form onSubmit={handleSubmit} className="inline">
+          <input
+            type="number"
+            className="bg-slate-800 border border-white/5 rounded-md w-10 text-center input-w-arrow"
+            defaultValue={to}
+            ref={perPageRef}
+          />
+        </form>
         {totalPages && ` de ${totalPages} página${totalPages > 1 ? 's' : ''}`}
       </p>
       <button

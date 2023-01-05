@@ -11,7 +11,7 @@ type TUseUsersParams = {
 
 export const useUsers = ({ page, perPage, setSeed, seed }: TUseUsersParams) =>
   useQuery({
-    queryKey: ['users', page, seed],
+    queryKey: ['users', page, perPage, seed],
     queryFn: () =>
       axios
         .get(
