@@ -6,9 +6,12 @@ import { GetClientResponse, Address, Client } from '../@types/client'
 import { api } from '../libs/axios'
 import { Navbar } from '../components/Navbar'
 import { Container } from '../components/Container'
-import { CaretLeft, CircleNotch, PencilLine, Trash } from 'phosphor-react'
+import { CircleNotch } from 'phosphor-react'
 import { RegisterClientModal } from '../components/RegisterClientModal'
 import { ClientModalFormData } from '../validations/forms'
+import { ClientPageActionButtons } from '../components/pages/ClientPage/ActionButtons'
+import { TableRow } from '../components/pages/ClientPage/TableRow'
+import { isDateKey } from '../utils/isDateKey'
 
 export const ClientPage = () => {
   const { clientId } = useParams()
@@ -52,7 +55,7 @@ export const ClientPage = () => {
     setIsModalOpen(false)
   }
 
-  const editCurrentClient = (client: Client) => {
+  const handleEditCurrentClient = (client: Client) => {
     setCurrentClient(client)
     setIsModalOpen(true)
   }
@@ -111,50 +114,34 @@ export const ClientPage = () => {
             )}
             {client && (
               <>
-                <div className="flex justify-between w-full">
-                  <button
-                    className="p-4 transition-colors text-gray-300 hover:text-gray-400"
-                    onClick={() => navigate('/dashboard/clients')}
-                  >
-                    <span className="sr-only">Edit client</span>
-                    <CaretLeft size={24} />
-                  </button>
-                  <div>
-                    <button
-                      className="p-4 transition-colors text-gray-300 hover:text-indigo-400"
-                      onClick={() => editCurrentClient(client)}
-                    >
-                      <span className="sr-only">Edit client</span>
-                      <PencilLine size={24} />
-                    </button>
-                    <button
-                      className="p-4 transition-colors text-gray-300 hover:text-red-400"
-                      onClick={() => handleDeleteClient(client.id)}
-                    >
-                      <span className="sr-only">Delete client</span>
-                      <Trash size={24} />
-                    </button>
-                  </div>
-                </div>
+                <ClientPageActionButtons
+                  client={client}
+                  onDelete={handleDeleteClient}
+                  onEdit={handleEditCurrentClient}
+                />
                 <div className="border border-white/10 rounded-md shadow-md w-full p-2">
                   <table className="w-full text-gray-200 text-lg table [&_td]:border-l [&_td]:border-l-white/10 [&_td]:pl-2 [&_td]:p-2 [&_th]:p-2 border-collapse">
                     <tbody>
                       {Object.entries(client).map(([key, value]) => {
                         if (key === 'address') {
                           return Object.entries(value as Address).map(
-                            ([key, value]) => (
-                              <tr key={value} className="table-row">
-                                <th className="font-bold text-left">{key}</th>
-                                <td>{value}</td>
-                              </tr>
-                            ),
+                            ([key, value]) => {
+                              // since I don't want the `createdAt` and `updatedAt` from
+                              // the Address Table, I'm checking if the key is a date
+                              if (isDateKey(key)) return null
+                              return (
+                                <TableRow key={key} title={key} value={value} />
+                              )
+                            },
                           )
                         }
+
                         return (
-                          <tr key={key} className="table-row">
-                            <th className="font-bold text-left">{key}</th>
-                            <td>{value as string}</td>
-                          </tr>
+                          <TableRow
+                            key={key}
+                            title={key}
+                            value={value as string}
+                          />
                         )
                       })}
                     </tbody>
