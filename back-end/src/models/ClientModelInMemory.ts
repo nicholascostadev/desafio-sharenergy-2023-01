@@ -1,4 +1,4 @@
-import { CreateProps, Query } from '../@types/client'
+import { CreateProps, PaginatedGetReturn, Query } from '../@types/client'
 
 import { ClientModel } from './ClientModel'
 import { Client } from '../entities/Client'
@@ -79,14 +79,16 @@ export class ClientModelInMemory implements ClientModel {
     }
   ]
 
-  getAll = async ({ filter, query }: Query): Promise<Client[]> => {
-    if (query == null) return await Promise.resolve(this.clients)
+  getAll = async ({ filter, query, page, perPage }: Query): Promise<PaginatedGetReturn> => {
+    if (query == null) return await Promise.resolve({ clients: this.clients, totalPages: 0 })
 
     const clients = this.clients.filter(client => {
       return client[filter].toLowerCase().includes(query.toLowerCase())
     })
 
-    return await Promise.resolve(clients)
+    const totalPages = Math.ceil(this.clients.length / (perPage ?? 10))
+
+    return await Promise.resolve({ clients, totalPages })
   }
 
   getByEmail = async (email: string): Promise<Client | null> => {
