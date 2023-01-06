@@ -1,23 +1,17 @@
 import { RequestHandler } from 'express'
 import { AuthService } from '../services/AuthService'
 import { ZodError } from 'zod'
-import { loginSchema, querySchema } from '../validations/auth'
+import { loginSchema } from '../validations/auth'
 
 export class AuthController {
   static login: RequestHandler = (req, res) => {
     try {
       const { login, password } = loginSchema.parse(req.body)
-      const { persist } = querySchema.parse(req.query)
       const token = AuthService.login({ login, password })
 
-      res.cookie('sharenergy-session', token, {
-        expires: persist ? new Date(Date.now() + 86400000) : undefined, // 24 hours or only until browser is closed
-        path: '/',
-        domain: process.env.PROD === 'true' ? process.env.FRONTEND_DOMAIN : 'localhost'
-      })
-
       return res.status(200).json({
-        message: 'Success'
+        message: 'Success',
+        token
       })
     } catch (error) {
       if (error instanceof ZodError) {

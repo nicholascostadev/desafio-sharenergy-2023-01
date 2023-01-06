@@ -9,6 +9,7 @@ import { useSession } from '../hooks'
 import { api } from '../libs/axios'
 import { AxiosInputError } from '../components/AxiosInputError'
 import { LoginFormData, loginSchema } from '../validations/forms'
+import { useCookies } from 'react-cookie'
 
 type LoginData = {
   login: LoginFormData['username']
@@ -33,7 +34,16 @@ export const LoginPage = () => {
     reValidateMode: 'onSubmit',
   })
 
+  const [_, setCookie] = useCookies(['sharenergy-session'])
+
   const rememberMe = watch('remember-me')
+
+  const handleSaveToken = (token: string) => {
+    setCookie('sharenergy-session', token, {
+      path: '/',
+      expires: rememberMe ? new Date(Date.now() * 86400000) : undefined,
+    })
+  }
 
   const {
     mutate: login,
@@ -45,8 +55,9 @@ export const LoginPage = () => {
         .post(`/auth/login?persist=${rememberMe}`, loginData)
         .then((res) => res.data)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // refresh page for cookie to take effect
+      handleSaveToken(data.token)
       navigate(0)
     },
     onError: (err) => {
