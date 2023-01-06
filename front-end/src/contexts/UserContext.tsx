@@ -9,6 +9,7 @@ type User = {
 type TUserContext = {
   username: User['username']
   isLoading: boolean
+  token: string
 }
 
 export const userContext = createContext({} as TUserContext)
@@ -36,9 +37,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         return
       }
       await api
-        .post('/auth/validate', {
-          jwtToken: sessionCookie,
-        })
+        .post('/auth/validate', { jwtToken: sessionCookie })
         .then((res) => res.data)
         .then((res) => {
           setUsername(res.data.username)
@@ -52,6 +51,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const sessionInfo = {
     username,
     isLoading,
+    token: sessionCookie,
   }
 
   return (

@@ -43,12 +43,6 @@ export const LoginPage = () => {
       path: '/',
       expires: rememberMe ? new Date(Date.now() * 86400000) : undefined,
     })
-
-    setCookie('sharenergy-session', token, {
-      path: '/',
-      expires: rememberMe ? new Date(Date.now() * 86400000) : undefined,
-      domain: import.meta.env.VITE_DATABASE_URL,
-    })
   }
 
   const {

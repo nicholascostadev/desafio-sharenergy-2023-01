@@ -24,7 +24,7 @@ const titles = [
 ]
 
 export const Clients = () => {
-  const { username, isLoading } = useSession()
+  const { username, isLoading, token } = useSession()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentClient, setCurrentClient] = useState<
     ClientModalFormData | undefined
@@ -61,6 +61,11 @@ export const Clients = () => {
       api
         .get(
           `/clients?perPage=${perPage}&page=${page}&filter=${selectedFilter}&query=${searchValue}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         )
         .then((res) => res.data),
     staleTime: 1000 * 60 * 15, // 15 minutes
