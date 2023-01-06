@@ -12,7 +12,8 @@ export class AuthController {
 
       res.cookie('sharenergy-session', token, {
         expires: persist ? new Date(Date.now() + 86400000) : undefined, // 24 hours or only until browser is closed
-        path: '/'
+        path: '/',
+        domain: process.env.PROD === 'true' ? process.env.FRONTEND_DOMAIN : 'localhost'
       })
 
       return res.status(200).json({
