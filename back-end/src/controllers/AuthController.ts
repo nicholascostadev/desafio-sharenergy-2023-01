@@ -11,7 +11,9 @@ export class AuthController {
       const token = AuthService.login({ login, password })
 
       res.cookie('sharenergy-session', token, {
-        expires: persist ? new Date(Date.now() + 86400000) : undefined // 24 hours or only until browser is closed
+        expires: persist ? new Date(Date.now() + 86400000) : undefined, // 24 hours or only until browser is closed
+        path: '/',
+        domain: process.env.PROD === 'true' ? process.env.FRONTEND_URL : 'http://localhost:4444'
       })
 
       return res.status(200).json({
