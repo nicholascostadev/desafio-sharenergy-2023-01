@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { parseAuthorization } from '../utils/parseAuthorization'
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = parseAuthorization(req.header('Authorization'))
+  const token = parseAuthorization(req.header('authorization'))
 
   if (token == null) {
     return res.status(401).json({
