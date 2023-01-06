@@ -1,5 +1,10 @@
 import axios from 'axios'
 
+const token = document.cookie
+  .split('; ')
+  .find((row) => row.startsWith('sharenergy-session='))
+  ?.split('=')[1]
+
 export const api = axios.create({
   withCredentials: true,
   baseURL: import.meta.env.PROD
@@ -10,5 +15,6 @@ export const api = axios.create({
       ? import.meta.env.VITE_DATABASE_URL
       : 'http://localhost:4444',
     'Access-Control-Allow-Credentials': 'true',
+    authorization: `Bearer ${token}`,
   },
 })

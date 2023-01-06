@@ -9,7 +9,6 @@ type User = {
 type TUserContext = {
   username: User['username']
   isLoading: boolean
-  token: string
 }
 
 export const userContext = createContext({} as TUserContext)
@@ -51,7 +50,6 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const sessionInfo = {
     username,
     isLoading,
-    token: sessionCookie,
   }
 
   return (
