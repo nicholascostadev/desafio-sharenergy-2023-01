@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import axios from 'axios'
+import { api } from '../libs/axios'
 
 type User = {
   username: string | undefined
@@ -35,8 +35,8 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false)
         return
       }
-      await axios
-        .post('http://localhost:4444/auth/validate', {
+      await api
+        .post('/auth/validate', {
           jwtToken: sessionCookie,
         })
         .then((res) => res.data)
