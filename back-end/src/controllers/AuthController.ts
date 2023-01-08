@@ -7,7 +7,7 @@ const model = new AuthModelStatic()
 const authService = new AuthService(model)
 
 export class AuthController {
-  static login: RequestHandler = (req, res) => {
+  login: RequestHandler = (req, res) => {
     try {
       const token = authService.login(req)
 
@@ -37,7 +37,7 @@ export class AuthController {
     }
   }
 
-  static validateToken: RequestHandler = (req, res) => {
+  validateToken: RequestHandler = (req, res) => {
     try {
       const token = authService.validateToken(req)
 
