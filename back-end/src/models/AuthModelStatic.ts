@@ -13,10 +13,6 @@ export class AuthModelStatic implements AuthModel {
   }
 
   validateToken = (jwtToken: string): string | JwtPayload => {
-    if (jwtToken == null) {
-      throw new Error('Unauthorized - No token received')
-    }
-
     try {
       return jwt.verify(jwtToken, process.env.AUTH_SECRET as string)
     } catch (err) {
