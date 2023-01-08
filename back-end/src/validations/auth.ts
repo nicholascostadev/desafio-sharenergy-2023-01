@@ -15,3 +15,10 @@ export const loginSchema = z.object({
 export const querySchema = z.object({
   persist: z.union([z.literal('true'), z.literal('false')]).optional().transform(val => val === 'true')
 })
+
+export const tokenSchema = z.object({
+  jwtToken: z.string({
+    required_error: 'Token is required',
+    invalid_type_error: 'Token has to be of type `string`'
+  }).min(1, 'Token is required')
+})

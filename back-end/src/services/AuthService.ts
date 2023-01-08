@@ -1,29 +1,19 @@
-import jwt from 'jsonwebtoken'
-import { LoginInfo } from '../@types/auth'
+import { AuthModel } from '../models/AuthModel'
+import { loginSchema, tokenSchema } from '../validations/auth'
+import { Request } from 'express'
 
 export class AuthService {
-  static login = (loginInfo: LoginInfo): string | undefined => {
-    const { login, password } = loginInfo
+  constructor (private readonly authModel: AuthModel) {}
 
-    // hardcoded for now
-    if (login === 'desafiosharenergy' && password === 'sh@r3n3rgy') {
-      const token = jwt.sign({ username: login }, process.env.AUTH_SECRET as string, { expiresIn: '1d' })
+  login = (req: Request): string | undefined => {
+    const { login, password } = loginSchema.parse(req.body)
 
-      return token
-    }
-
-    throw new Error('Wrong email or password')
+    return this.authModel.login(login, password)
   }
 
-  static validateToken = (jwtToken: string) => {
-    if (jwtToken == null) {
-      throw new Error('Unauthorized - No token received')
-    }
+  validateToken = (req: Request) => {
+    const { jwtToken } = tokenSchema.parse(req.body)
 
-    try {
-      return jwt.verify(jwtToken, process.env.AUTH_SECRET as string)
-    } catch (err) {
-      throw new Error('Unauthorized - Invalid token')
-    }
+    return this.authModel.validateToken(jwtToken)
   }
 }

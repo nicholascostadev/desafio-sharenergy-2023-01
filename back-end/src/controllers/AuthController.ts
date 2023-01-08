@@ -1,13 +1,15 @@
 import { RequestHandler } from 'express'
 import { AuthService } from '../services/AuthService'
 import { ZodError } from 'zod'
-import { loginSchema } from '../validations/auth'
+import { AuthModelStatic } from '../models/AuthModelStatic'
+
+const model = new AuthModelStatic()
+const authService = new AuthService(model)
 
 export class AuthController {
   static login: RequestHandler = (req, res) => {
     try {
-      const { login, password } = loginSchema.parse(req.body)
-      const token = AuthService.login({ login, password })
+      const token = authService.login(req)
 
       return res.status(200).json({
         message: 'Success',
@@ -37,8 +39,7 @@ export class AuthController {
 
   static validateToken: RequestHandler = (req, res) => {
     try {
-      const { jwtToken } = req.body
-      const token = AuthService.validateToken(jwtToken)
+      const token = authService.validateToken(req)
 
       return res.status(200).json({
         message: 'Success',
