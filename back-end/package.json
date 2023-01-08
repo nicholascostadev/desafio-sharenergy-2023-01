@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "NODE_ENV=test jest --watch",
     "dev": "tsx watch src/bootstrap.ts",
     "build": "npx tsc",
     "build:prod": "npx tsc && npx prisma generate && npx prisma db push",

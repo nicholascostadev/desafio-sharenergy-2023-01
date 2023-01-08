@@ -1,9 +1,10 @@
 import { RequestHandler } from 'express'
 import { ClientService } from '../services/ClientService'
-import { ClientModelPrisma } from '../models/ClientModelPrisma'
 import { ZodError } from 'zod'
+import { ClientModelInMemory } from '../models/ClientModelInMemory'
+import { ClientModelPrisma } from '../models/ClientModelPrisma'
 
-const model = new ClientModelPrisma()
+const model = process.env.NODE_ENV === 'test' ? new ClientModelInMemory() : new ClientModelPrisma()
 const clientService = new ClientService(model)
 
 export class ClientController {
