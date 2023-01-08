@@ -6,7 +6,7 @@ import { Client } from '../entities/Client'
 export class ClientModelInMemory implements ClientModel {
   clients: Client[] = [
     {
-      id: '1',
+      id: '8c5ab51d-76d9-45a7-bf58-d97185b9eebf',
       name: 'client 1',
       email: 'adaskjd@gmaiol.com',
       cpf: '12345678910',
@@ -24,8 +24,8 @@ export class ClientModelInMemory implements ClientModel {
       updatedAt: new Date()
     },
     {
-      id: '1',
-      name: 'client 1',
+      id: '2c2ee694-86ed-45bf-9b8d-5aa777825f71',
+      name: 'client 2',
       cpf: '12345678910',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
@@ -42,8 +42,8 @@ export class ClientModelInMemory implements ClientModel {
       updatedAt: new Date()
     },
     {
-      id: '1',
-      name: 'client 1',
+      id: '30ac45c2-c203-4baa-9bc1-28d00716f811',
+      name: 'client 3',
       cpf: '12345678910',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
@@ -60,8 +60,8 @@ export class ClientModelInMemory implements ClientModel {
       updatedAt: new Date()
     },
     {
-      id: '1',
-      name: 'client 1',
+      id: '027fb863-172a-4085-8d48-a68d98dac1bb',
+      name: 'client 4',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
       cpf: '12345678910',
@@ -79,10 +79,12 @@ export class ClientModelInMemory implements ClientModel {
     }
   ]
 
-  getAll = async ({ filter, query, page, perPage }: Query): Promise<PaginatedGetReturn> => {
-    if (query == null) return await Promise.resolve({ clients: this.clients, totalPages: 0 })
+  getAll = async ({ filter, query, page = 1, perPage }: Query): Promise<PaginatedGetReturn> => {
+    const totalPages = Math.ceil(this.clients.length / (perPage ?? 10))
 
-    const clients = this.clients.filter(client => {
+    if (query == null) return await Promise.resolve({ clients: this.clients.slice(0, perPage), totalPages })
+
+    const filteredClients = this.clients.filter(client => {
       return client[filter].toLowerCase().includes(query.toLowerCase())
     })
 
