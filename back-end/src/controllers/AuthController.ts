@@ -19,20 +19,20 @@ export class AuthController {
       if (error instanceof ZodError) {
         return res.status(400).json({
           message: 'Validation Error',
-          data: error.issues.map(issue => issue.message)
+          error: error.issues.map(issue => issue.message)
         })
       }
 
       if (error instanceof Error) {
         return res.status(401).json({
           message: 'Error',
-          data: error.message
+          error: error.message
         })
       }
 
       return res.status(401).json({
         message: 'Error',
-        data: error
+        error
       })
     }
   }
@@ -49,13 +49,13 @@ export class AuthController {
       if (error instanceof Error) {
         return res.status(401).json({
           message: 'Error',
-          data: error.message
+          error: error.message
         })
       }
 
       return res.status(401).json({
         message: 'Error',
-        data: error
+        error
       })
     }
   }
