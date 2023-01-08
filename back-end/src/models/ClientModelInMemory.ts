@@ -86,15 +86,7 @@ export class ClientModelInMemory implements ClientModel {
       return client[filter].toLowerCase().includes(query.toLowerCase())
     })
 
-    const totalPages = Math.ceil(this.clients.length / (perPage ?? 10))
-
-    return await Promise.resolve({ clients, totalPages })
-  }
-
-  getByEmail = async (email: string): Promise<Client | null> => {
-    const client = this.clients.find(client => client.email === email)
-
-    return await Promise.resolve(client ?? null)
+    return await Promise.resolve({ clients: filteredClients, totalPages })
   }
 
   getById = async (clientId: string): Promise<Client | null> => {

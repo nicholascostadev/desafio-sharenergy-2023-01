@@ -41,16 +41,6 @@ export class ClientModelPrisma implements ClientModel {
     return client
   }
 
-  getByEmail = async (email: string): Promise<ClientPrisma | null> => {
-    const client = await prisma.client.findUnique({
-      where: {
-        email
-      }
-    })
-
-    return client
-  }
-
   create = async ({ name, email, address, cpf, telephone }: CreateProps): Promise<ClientPrisma> => {
     const client = await prisma.client.create({
       data: {
