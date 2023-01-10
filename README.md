@@ -1,92 +1,99 @@
-# Desafio para o processo seletivo SHARENERGY 2023/01
+# Sharenergy
 
-Repositório destinado aos interessados em participar do processo seletivo da SHARENERGY 2023/01. As vagas são voltadas para desenvolvimento de aplicações Web e Mobile.
+Teste para vaga de Full-stack Developer.
 
-## Sobre a SHARENERGY
+Dei deploy do site nessa [URL](https://sharenergy-test.netlify.app/)
 
-No ramo da produção de energia fotovoltaica, há a modalidade de produção compartilhada. Nessa modalidade, diferentes pessoas investem na construção de uma mesma usina fotovoltaica e dividem o retorno finaceiro referente à energia gerada pela usina.
+## Vídeo
 
-Acreditamos que as energias renováveis terão um lugar dominante em nossa economia pelo resto de nossas vidas. Trabalhamos no sentido de ampliar o impacto positivo que as energias renováveis podem ter no meio ambiente e nas nossas vidas. O sucesso da SHARENERGY é resultado de nossa equipe apaixonada, juntamente com nosso compromisso de oferecer a melhor solução.
+- [Vídeo de apresentação](https://www.youtube.com/watch?v=gPYd0Up-WRM)
 
-Sabemos que negócios enfrentam desafios únicos e por isso oferecemos soluções turnkey, customizadas, economicamente viáveis e seguras.
+## Tecnologias utilizadas
 
-A Startup figura entre as top 10 EnergyTechs do ranking 100 Open Startups desde 2018. Prova de que a inovação está enraizada em nossa cultura. Somos uma startup em estágio de crescimento e você trabalhará diretamente com os fundadores, ajudando a definir a visão, o produto e a experiência do usuário.
+Front-end
 
-<p align="left">
-  <a href="https://www.linkedin.com/company/sharenergy-brasil/">
-    <img src="https://img.shields.io/badge/LinkedIn-%230077B5.svg?&style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn Button">
-  </a>
-  <a href="https://sharenergy.com.br/">
-    <img src="https://img.shields.io/badge/-Website-red" alt="Sharenergy Website Button">
-  </a>
-</p>
+Escolhi essas tecnologias a partir do que estava sendo dito no repositório que a empresa utiliza, como o React(Não foi especificado Nextjs, então usei o Vite, mas acharia melhor o Nextjs), TypeScript (Não utilizo mais JavaScript praticamente, TailwindCSS(minha estilização favorita):
 
-## Sobre a vaga
+- [React + Vite](https://vitejs.dev/)
+- [Tailwindcss](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Axios](https://axios-http.com/)
+- [classNames](https://github.com/JedWatson/classnames)
+- [React-query](https://react-query-v3.tanstack.com/)
+- [React-hook-form](https://react-hook-form.com/)
+- [Zod](https://github.com/colinhacks/zod)
+- [dayjs](https://day.js.org/)
 
-Já pensou em potencializar o setor que mais cresce na galáxia e trabalhar com uma solução que utiliza tecnologia web de ponta, altamente distribuída com foco em performance e disponibilidade? 👀
+Back-end
 
-Os desenvolvedores da Sharenergy são responsáveis por criar e manter aplicações para clientes internos e externos, prover soluções escaláveis, resilientes e altamente disponíveis que sustentem picos de acesso além de atuar como referência técnica e tutores de outros desenvolvedores.
+Não foi dito exatamente qual framework era utilizado para trabalhar com o MongoDB, como eu tenho mais experiência com o Prisma, acabei optando por ele.
 
-Procuramos por pessoas dinâmicas e que queiram estar aprendendo sempre. Nossa equipe é jovem, motivada e estamos sempre em busca de soluções criativas para alcançar os resultados que nossos clientes esperam. Se você tem esse perfil, é autoconfiante, autodidata e tem facilidade para lidar com desafios diários, essa vaga é para você!
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+- [Express](https://expressjs.com/)
+- [jwt](https://jwt.io/)
+- [Zod](https://github.com/colinhacks/zod)
 
-# O Desafio
+## Pontos fortes da aplicação
 
-Construir uma aplicação web (frontend e backend) capaz de realizar a comunicação com APIs distintas, além de um CRUD.
-
-## Aplicação
-
-- A página inicial da aplicação deve ser uma `Login Page`;
-- O usuário deve ser capaz de se autenticar utilizando o username `desafiosharenergy` e password `sh@r3n3rgy`, também, deve existir a possibilidade do usuário utilizar o `remember me` para realizar logins automáticos, sem a necessidade de digitar username e password após o primeiro acesso;
-- Após o Login, a página principal deve conter uma listagem de usuários gerada a partir da api [Random User Generator](https://randomuser.me/), a lista deve conter a foto do usuário, nome completo, email, username e idade. Além disso, os requests devem ser páginados, porém, é de critério do participante do desafio a quantidade de resultados a serem exibidos por página e variações para o mesmo. Também, deve haver uma search para buscar usuários por nome, email ou username;
-- Em uma segunda página, o usuário deve ser capaz de selecionar um status code http qualquer, e, após a seleção, deve ser retornada uma imagem da api [HTTP Cat](https://http.cat/) relacionada ao status escolhido, caso não exista tal imagem, deve ser retornada uma imagem de not found à critério de escolha do participante do desafio;
-- Em uma terceira página, deve haver um botão de refresh que, ao ser clicado, deve retornar uma imagem aleatória da api [Random Dog](https://random.dog/);
-- Em uma quarta página, deve haver uma lista de clientes, através da qual o usuário deve ser capaz de cadastrar novos clientes, visualizar informações de um cliente específico, atualizar um cliente e deletar clientes. O cadastro deve possuir nome, email, telefone, endereço e cpf.
-
-### Requisitos da aplicação e de código
-
-- Interface amigável, bonita e limpa
-- Responsividade
 - Clean Code
+- Componentização do front-end permitindo melhor reusabilidade
+- Todos os dados tanto enviados quanto recebidos são altamente validados através da biblioteca [zod](https://github.com/colinhacks/zod).
 
-### Ferramentas e Stack a ser utilizado
+## Pontos que não puderam ser resolvidos em deploy
 
-- ReactJS para o frontend
-- NodeJS (com ou sem frameworks) ou Golang para o backend
-- MongoDB
-- TypeScript
-- HTML e CSS
+- A autorização está sendo feita através de um Header `authorization: Bearer tokenDoUsuário`, está sendo desta maneira por dois motivos:
+  1. Só existe um usuário na aplicação
+  2. Como eu não possuo um domínio próprio, não consegui deixar o back-end e o front-end no mesmo domínio, impossibilitando de setar os cookies no front-end
+- O token sendo passado no `Bearer` é apenas o token JWT do usuário, não chega a ser um problema porque o token é verificado no back-end todas requisições para saber se está válido ou não, porém, não está seguindo as recomendações de autorização tipo [Auth0](https://auth0.com/).
 
-### Aprimoramentos adicionais da aplicação (opcional)
+## Como rodar o projeto localmente
 
-A aplicação criada para o desafio pode ser aprimorada com recursos pensados por você. A seguir, foram listadas algumas sugestões do que poderia ser feito:
+Pra rodar o site localmente você vai precisar rodar tanto o back-end quanto o front-end ao mesmo tempo, para fazer isso você pode seguir esses passos:
 
-- Testes
-- Documentação
+```bash
+# Clone o repositório
+git clone https://github.com/nicholascostadev/desafio-sharenergy-2023-01.git
+# Entre na pasta do Front-end
+cd front-end
+# Instale as dependências
+npm install
+# Rode o servidor em modo desenvolvimento
+npm run dev
+```
 
-### Mas, afinal, quais ferramentas a Sharenergy utiliza?
+Em outro terminal:
 
-* [Javascript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) e [Typescript](https://www.typescriptlang.org/)
-* Front-end: [ReactJS](https://reactjs.org/) e [React Native](https://reactnative.dev/)
-* Back-end: [Node.js](https://nodejs.org/en/), [NestJS](https://nestjs.com/) e [Go](https://golang.org/)
-* Banco de dados: [MongoDB](https://www.mongodb.com/) do lado do servidor e [Minimongo](https://guide.meteor.com/collections.html) do lado do cliente (cache)
-* Gerenciamento de Containers: [Docker](https://www.docker.com/)
-* Gerenciamento de Repositórios: [NX](https://nx.dev/)
-* UI: [Tailwind CSS](https://tailwindcss.com/) e [Material-UI V4](https://v4.mui.com/)
-* Sistema Operacional (principal): [Linux](https://www.linux.org/), também sendo possível utilizar o [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) (WSL)
+```bash
+# Entre na pasta do back-end
+cd back-end
+# Instale as dependências
+npm install
+# Rode o servidor em modo desenvolvimento
+npm run dev
+```
 
-## O que devo entregar?
+Agora está tudo funcionando e basta entrar na url: `http://localhost:5173s`
 
-Esperamos de você duas entregas: o código no GitHub e um vídeo explicativo no YouTube.
+## Rodar os testes
 
-### Instruções
+Os testes só foram desenvolvidos para o Back-end, fazer os testes para o Front-end levaria muito tempo e não achei necessário priorizar nesse desafio.
 
-- Faça um fork desse repositório.
-- Em seguida, crie uma branch, cujo nome é o seu nome completo, no seguinte formato: meu-nome-completo.
-- Resolva o desafio realizando versionamento local e remoto. Fique à vontade em criar outras branches durante o desenvolvimento do código.
-- Inclua no README.md uma breve instrução de instalação e de execução da aplicação criada.
-- Faça um vídeo que explique o que você fez no desafio, com duração aproximada de 5 minutos. A facecam é opcional, mas bem-vinda. O vídeo deve ser postado no YouTube (pode deixar como não listado) e seu link deve ser colocado no README.md.
-- Ao finalizar o desafio, faça um pull request de sua branch para esse repositório.
+```bash
+# Entre na pasta do back-end
+cd back-end
+# Rode os testes
+npm run test
 
-### Prazo limite de entrega
+# Caso queira rodar os testes com coverage report, pode usar também:
+npm run test:coverage
+```
 
-O pull request com sua solução do desafio deve ser feito até a data especificada no corpo do email que você recebeu com a descrição do desafio.
+## Como testar
+
+- Único usuário cadastrado: login: `desafiosharenergy`, senha: `sh@r3n3rgy`
+- Páginas:
+  1. Dashboard - Essa página pega é responsável por pegar os usuário aleatórios da [random user api](https://randomuser.me/) e renderiza uma tabela mostrando a foto, nome, email, username e idade. É possível escolher a quantidade de usuários por página e filtrar através do seu nome, email ou username
+  2. Cat - Essa página espera um código HTTP válido e retorna uma imagem de um gato correspondente com o código HTTP enviado. Utiliza-se a api de [httpCat](https://http.cat/) passando o status desejado, que retorna uma imagem que corresponde.
+  3. Dog - Essa página carrega inicialmente uma imagem ou GIF de cachorro aleatório e possui um botão capaz de gerar mais. Os GIFs e imagens são gerados a partir da [api](https://random.dog/). Como essa API retorna um HTML, foi necessário pegar o HTML e encontrar o elemento que contenha o `src` necessário para imagem ou GIF, assim sendo possível mostrar na tela (essa foi a maneira que eu encontrei para utilizar essa API, não encontrei uma maneria de pegar o src a partir de um endpoint, então fiz o possível)
+  4. Clientes - Página responsável por mostrar clientes cadastrados e permitir o cadastro de novos, edição ou deleção de clientes já cadastrados. Possui diversas validações, não permitindo CPFs inválidos. Na tabela é possível pesquisar clientes pelo email ou nome, alterar o número de itens por página.
