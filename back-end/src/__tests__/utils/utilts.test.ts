@@ -32,4 +32,14 @@ describe('parseAuthorization', () => {
 
     expect(parsedToken).toStrictEqual(null)
   })
+
+  it('Should return null if receives token in invalid format', () => {
+    const token = 'Bearer  Bearer jfhafkjdshflakjdas'
+
+    const parsedToken = parseAuthorization(token)
+
+    console.log({ token, parsedToken })
+
+    expect(parsedToken).toStrictEqual(null)
+  })
 })
