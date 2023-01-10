@@ -122,7 +122,7 @@ export const Clients = () => {
           initialData={currentClient as Client}
         />
 
-        <Container className="min-h-[calc(100vh-64px)] w-[1600px] mt-16 pt-4">
+        <Container className="min-h-[calc(100vh-64px)] mt-16 pt-4">
           <h2 className="text-white text-2xl">Clientes</h2>
 
           <div className={'flex justify-between items-start mt-6 gap-4'}>
