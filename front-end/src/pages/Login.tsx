@@ -9,7 +9,6 @@ import { useSession } from '../hooks'
 import { api } from '../libs/axios'
 import { AxiosInputError } from '../components/AxiosInputError'
 import { LoginFormData, loginSchema } from '../validations/forms'
-import { useCookies } from 'react-cookie'
 
 type LoginData = {
   login: LoginFormData['username']
@@ -17,7 +16,7 @@ type LoginData = {
 }
 
 export const LoginPage = () => {
-  const { username } = useSession()
+  const { username, handleSaveToken } = useSession()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -34,16 +33,7 @@ export const LoginPage = () => {
     reValidateMode: 'onSubmit',
   })
 
-  const [_, setCookie] = useCookies(['sharenergy-session'])
-
   const rememberMe = watch('remember-me')
-
-  const handleSaveToken = (token: string) => {
-    setCookie('sharenergy-session', token, {
-      path: '/',
-      expires: rememberMe ? new Date(Date.now() * 86400000) : undefined,
-    })
-  }
 
   const {
     mutate: login,
@@ -55,14 +45,8 @@ export const LoginPage = () => {
         .post(`/auth/login?persist=${rememberMe}`, loginData)
         .then((res) => res.data)
     },
-    onSuccess: (data) => {
-      // refresh page for cookie to take effect
-      handleSaveToken(data.token)
-      navigate(0)
-    },
-    onError: (err) => {
-      console.log(err)
-    },
+    onSuccess: (data) => handleSaveToken(data.token, rememberMe),
+    onError: (err) => console.error(err),
   })
 
   const handleLogin = async (data: LoginFormData) => {

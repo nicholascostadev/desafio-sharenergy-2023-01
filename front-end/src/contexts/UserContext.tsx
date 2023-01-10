@@ -9,6 +9,7 @@ type User = {
 type TUserContext = {
   username: User['username']
   isLoading: boolean
+  handleSaveToken: (token: string, rememberMe: boolean) => void
 }
 
 export const userContext = createContext({} as TUserContext)
@@ -16,7 +17,7 @@ export const userContext = createContext({} as TUserContext)
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState<undefined | string>(undefined)
   const [isLoading, setIsLoading] = useState(true)
-  const [cookies] = useCookies(['sharenergy-session'])
+  const [cookies, setCookie, removeCookie] = useCookies(['sharenergy-session'])
   const sessionCookie = cookies['sharenergy-session']
 
   useEffect(() => {
@@ -47,9 +48,19 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     getSessionToken()
   }, [sessionCookie, username])
 
+  const handleSaveToken = (token: string, rememberMe: boolean) => {
+    setCookie('sharenergy-session', token, {
+      path: '/',
+      expires: rememberMe
+        ? new Date(Date.now() + 24 * 60 * 60 * 1000)
+        : undefined,
+    })
+  }
+
   const sessionInfo = {
     username,
     isLoading,
+    handleSaveToken,
   }
 
   return (
