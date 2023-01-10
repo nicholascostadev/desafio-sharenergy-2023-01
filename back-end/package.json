@@ -9,7 +9,7 @@
     "dev": "tsx watch src/bootstrap.ts",
     "build": "npx tsc",
     "build:prod": "npx tsc && npx prisma generate && npx prisma db push",
-    "start": "node dist/bootstrap.js",
+    "start": "node dist/src/bootstrap.js",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix"
   },
