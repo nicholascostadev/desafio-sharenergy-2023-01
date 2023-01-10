@@ -25,7 +25,7 @@ export class ClientModelInMemory implements ClientModel {
     },
     {
       id: '2c2ee694-86ed-45bf-9b8d-5aa777825f71',
-      name: 'client 2',
+      name: 'Michael Harrison',
       cpf: '12345678910',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
@@ -43,7 +43,7 @@ export class ClientModelInMemory implements ClientModel {
     },
     {
       id: '30ac45c2-c203-4baa-9bc1-28d00716f811',
-      name: 'client 3',
+      name: 'Michael',
       cpf: '12345678910',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
@@ -61,7 +61,7 @@ export class ClientModelInMemory implements ClientModel {
     },
     {
       id: '027fb863-172a-4085-8d48-a68d98dac1bb',
-      name: 'client 4',
+      name: 'Harrison',
       email: 'adaskjd@gmaiol.com',
       telephone: '123456789101',
       cpf: '12345678910',
@@ -99,7 +99,7 @@ export class ClientModelInMemory implements ClientModel {
 
   create = async ({ name, email, cpf, address, telephone }: CreateProps): Promise<Client | null> => {
     const client: Client = {
-      id: '1',
+      id: crypto.randomUUID(),
       name,
       email,
       cpf,
@@ -118,7 +118,7 @@ export class ClientModelInMemory implements ClientModel {
     return await Promise.resolve(client)
   }
 
-  update = async (id: string, { name, email, cpf, address }: CreateProps): Promise<Client | null> => {
+  update = async (id: string, { name, email, cpf, telephone, address }: CreateProps): Promise<Client | null> => {
     const client = this.clients.find(client => client.id === id)
 
     if (client == null) return await Promise.resolve(null)
@@ -126,6 +126,7 @@ export class ClientModelInMemory implements ClientModel {
     client.name = name
     client.email = email
     client.cpf = cpf
+    client.telephone = telephone
     client.address = {
       ...address,
       additionalInfo: address.additionalInfo ?? null,
