@@ -7,7 +7,7 @@ export const AxiosInputError = ({ error }: { error: unknown }) => {
   return (
     <ErrorText>
       {error.response?.status === 401
-        ? 'Email ou(e) senha incorreto(s)'
+        ? 'Username ou(e) senha incorreto(s)'
         : 'Erro ao se autenticar, contate o suporte para mais informações'}
     </ErrorText>
   )
