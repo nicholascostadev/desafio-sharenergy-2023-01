@@ -70,8 +70,8 @@ export const LoginPage = () => {
             placeholder="Username"
             className={
               isError || errors.username
-                ? 'ring-red-500 focus:ring-red-500'
-                : ''
+                ? 'ring-red-500 focus:ring-red-500 p-2'
+                : 'p-2'
             }
             {...register('username')}
           />
@@ -80,10 +80,11 @@ export const LoginPage = () => {
             label="Password"
             error={errors.password}
             placeholder="Password"
+            type="password"
             className={
               isError || errors.password
-                ? 'ring-red-500 focus:ring-red-500'
-                : ''
+                ? 'ring-red-500 focus:ring-red-500 p-2'
+                : 'p-2'
             }
             {...register('password')}
           />
@@ -99,7 +100,7 @@ export const LoginPage = () => {
           </label>
           <button
             type="submit"
-            className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition-colors font-bold"
+            className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition-colors font-bold "
             disabled={isSubmitting}
           >
             Entrar
