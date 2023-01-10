@@ -54,6 +54,20 @@ Pra rodar o site localmente você vai precisar rodar tanto o back-end quanto o f
 ```bash
 # Clone o repositório
 git clone https://github.com/nicholascostadev/desafio-sharenergy-2023-01.git
+
+```
+
+É necessário preencher as variáveis de ambiente necessárias, então siga os seguintes passos:
+
+```bash
+# Copie o template das variáveis de ambiente
+cp .env.example .env
+# Agora preencha todas elas
+```
+
+Após ter preenchido, continue
+
+```bash
 # Entre na pasta do Front-end
 cd front-end
 # Instale as dependências
