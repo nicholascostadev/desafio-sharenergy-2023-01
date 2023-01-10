@@ -17,7 +17,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     next()
   } catch (err) {
-    res.clearCookie('shark-session', { path: '/' })
     return res.status(401).json({
       message: 'Error',
       error: 'Unauthorized - Invalid token'
