@@ -1,8 +1,9 @@
 import classNames from 'classnames'
-import { List, X } from 'phosphor-react'
+import { List, SignOut, X } from 'phosphor-react'
 import { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Container } from './Container'
+import { useSession } from '../hooks/useSession'
 
 const links = [
   {
@@ -25,7 +26,14 @@ const links = [
 
 export const Navbar = () => {
   const location = useLocation()
+  const { signOut } = useSession()
   const [isNavbarOpen, setIsNavbarOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const handleSignOut = () => {
+    signOut()
+    navigate(0)
+  }
 
   return (
     <nav className="fixed top-0 left-0 z-10 w-full border-b border-white/5 backdrop-blur-[12px]">
@@ -34,7 +42,7 @@ export const Navbar = () => {
 
         <button
           onClick={() => setIsNavbarOpen((prev) => !prev)}
-          className="relative sm:hidden"
+          className="relative md:hidden"
         >
           <List size={24} />
         </button>
@@ -42,12 +50,12 @@ export const Navbar = () => {
         <div
           className={classNames(
             'absolute transition-all top-0 -right-[100vw] bg-slate-900 h-screen w-screen',
-            'sm:right-0 sm:relative sm:bg-transparent sm:h-auto sm:w-auto sm:flex sm:items-center sm:justify-center',
+            'md:right-0 md:relative md:bg-transparent md:h-auto md:w-auto md:flex md:items-center md:justify-center',
             isNavbarOpen && 'right-[0]',
           )}
         >
           <button
-            className="absolute top-5 right-8 sm:hidden"
+            className="absolute top-5 right-8 md:hidden"
             onClick={() => setIsNavbarOpen(false)}
           >
             <X size={24} />
@@ -56,7 +64,7 @@ export const Navbar = () => {
           <ul
             className={classNames(
               'flex items-center gap-4 text-sm flex-col mt-12',
-              'sm:text-lg sm:flex-row sm:mt-0',
+              'md:text-lg md:flex-row md:mt-0',
               isNavbarOpen && 'text-xl',
             )}
           >
@@ -74,6 +82,15 @@ export const Navbar = () => {
                 </NavLink>
               </li>
             ))}
+            <li>
+              <button
+                onClick={handleSignOut}
+                className="bg-slate-800 hover:bg-white/5 text-gray-100 hover:text-gray-300 transition-colors border border-white/5 rounded-md py-1 px-4 flex justify-center items-center gap-2"
+              >
+                Sair
+                <SignOut size={24} />
+              </button>
+            </li>
           </ul>
         </div>
       </Container>

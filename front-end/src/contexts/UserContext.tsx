@@ -8,6 +8,7 @@ type User = {
 
 type TUserContext = {
   username: User['username']
+  signOut: () => void
   isLoading: boolean
   handleSaveToken: (token: string, rememberMe: boolean) => void
 }
@@ -48,6 +49,10 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     getSessionToken()
   }, [sessionCookie, username])
 
+  const signOut = () => {
+    removeCookie('sharenergy-session')
+  }
+
   const handleSaveToken = (token: string, rememberMe: boolean) => {
     setCookie('sharenergy-session', token, {
       path: '/',
@@ -61,6 +66,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     username,
     isLoading,
     handleSaveToken,
+    signOut,
   }
 
   return (
