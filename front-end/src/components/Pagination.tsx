@@ -27,20 +27,19 @@ export const Pagination = ({
     }
   }
 
-  const showing = page * perPage - perPage + 1
-  const to = page * perPage
   return (
     <div className="flex justify-end items-center gap-2 p-2">
       <p className="text-white">
-        Mostrando de {showing} a{' '}
+        Mostrando{' '}
         <form onSubmit={handleSubmit} className="inline">
           <input
             type="number"
             className="bg-slate-800 border border-white/5 rounded-md w-10 text-center input-w-arrow"
-            defaultValue={to}
+            defaultValue={perPage}
             ref={perPageRef}
           />
-        </form>
+        </form>{' '}
+        resultados
         {totalPages && ` de ${totalPages} página${totalPages > 1 ? 's' : ''}`}
       </p>
       <button
